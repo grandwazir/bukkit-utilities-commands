@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014 James Richardson.
  *
- * RequiredOptionArgument.java is part of BukkitUtilities.
+ * WorldMarshaller.java is part of BukkitUtilities.
  *
  * bukkit-utilities is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -18,18 +18,26 @@
 
 package name.richardson.james.bukkit.utilities.command.argument;
 
-import name.richardson.james.bukkit.utilities.command.argument.suggester.Suggester;
+import org.bukkit.Server;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
 
-public class RequiredOptionArgument extends OptionArgument {
+public class WorldMarshaller extends AbstractMarshaller {
 
-	public RequiredOptionArgument(ArgumentMetadata metadata, Suggester suggester) {
-		super(metadata, suggester);
+	private final Server server;
+
+	public WorldMarshaller(final Argument argument, Server server) {
+		super(argument);
+		this.server = server;
 	}
 
-	@Override
-	public void parseValue(final String argument) {
-		super.parseValue(argument);
-		if (getString() == null) throw new InvalidArgumentException(getError());
+	public World getWorld() {
+		World world = null;
+		if (getString() != null) {
+			world = server.getWorld(getString());
+		}
+		return world;
 	}
+
 
 }
