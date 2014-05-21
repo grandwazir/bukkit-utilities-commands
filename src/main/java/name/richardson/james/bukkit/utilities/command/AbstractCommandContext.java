@@ -18,28 +18,17 @@
 
 package name.richardson.james.bukkit.utilities.command;
 
-import java.util.*;
-import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 
-import name.richardson.james.bukkit.utilities.command.CommandContext;
-import name.richardson.james.bukkit.utilities.command.argument.InvalidArgumentException;
-import name.richardson.james.bukkit.utilities.logging.PluginLoggerFactory;
-
 /**
  * An example implementation of {@link name.richardson.james.bukkit.utilities.command.CommandContext}. This implementation makes no additional verification checks on requested argumentsList and may throw
  * IndexOutOfBoundExceptions from the internal backing storage.
  */
 public class AbstractCommandContext implements CommandContext {
-
-	private static final Logger LOGGER = PluginLoggerFactory.getLogger(CommandContext.class);
 
 	private final String arguments;
 	private final CommandSender commandSender;
@@ -55,6 +44,11 @@ public class AbstractCommandContext implements CommandContext {
 		Validate.notNull(commandSender);
 		this.commandSender = commandSender;
 		this.arguments = StringUtils.join(arguments, " ");
+	}
+
+	@Override
+	public String getArguments() {
+		return arguments;
 	}
 
 	/**
@@ -73,11 +67,6 @@ public class AbstractCommandContext implements CommandContext {
 	}
 
 	@Override
-	public String getArguments() {
-		return arguments;
-	}
-
-	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder("AbstractCommandContext{");
 		sb.append("arguments='").append(arguments).append('\'');
@@ -85,4 +74,5 @@ public class AbstractCommandContext implements CommandContext {
 		sb.append('}');
 		return sb.toString();
 	}
+
 }

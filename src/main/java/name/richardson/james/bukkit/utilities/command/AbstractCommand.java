@@ -30,22 +30,14 @@ import name.richardson.james.bukkit.utilities.command.argument.Argument;
 import name.richardson.james.bukkit.utilities.command.argument.ArgumentInvoker;
 import name.richardson.james.bukkit.utilities.command.argument.InvalidArgumentException;
 import name.richardson.james.bukkit.utilities.command.argument.SimpleArgumentInvoker;
-import name.richardson.james.bukkit.utilities.localisation.Localised;
-
-import static name.richardson.james.bukkit.utilities.localisation.BukkitUtilities.INVOKER_INVALID_ARGUMENT;
-import static name.richardson.james.bukkit.utilities.localisation.BukkitUtilities.INVOKER_NO_PERMISSION;
 
 public abstract class AbstractCommand implements Command {
 
 	private final ArgumentInvoker argumentInvoker;
-	private final String desc;
-	private final String name;
 	private CommandContext context;
 
-	public AbstractCommand(Localised name, Localised desc) {
+	public AbstractCommand() {
 		argumentInvoker = new SimpleArgumentInvoker();
-		this.name = name.asMessage();
-		this.desc = desc.asMessage();
 	}
 
 	@Override
@@ -54,22 +46,12 @@ public abstract class AbstractCommand implements Command {
 	}
 
 	@Override
-	public String getDescription() {
-		return desc;
-	}
-
-	@Override
-	public Collection<String> getExtendedUsage() {
+	public final Collection<String> getExtendedUsage() {
 		return argumentInvoker.getExtendedUsage();
 	}
 
 	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
-	public String getUsage() {
+	public final String getUsage() {
 		String arguments = getColouredArgumentUsage();
 		return ChatColor.YELLOW + getName() + " " + arguments;
 	}
@@ -93,12 +75,12 @@ public abstract class AbstractCommand implements Command {
 				this.execute();
 			} catch (InvalidArgumentException e) {
 				CommandSender sender = getContext().getCommandSender();
-				sender.sendMessage(INVOKER_INVALID_ARGUMENT.asErrorMessage());
+				// sender.sendMessage(INVOKER_INVALID_ARGUMENT.asErrorMessage());
 				sender.sendMessage(ChatColor.YELLOW + e.getError());
 			}
 		} else {
 			CommandSender sender = getContext().getCommandSender();
-			sender.sendMessage(INVOKER_NO_PERMISSION.asErrorMessage());
+			// sender.sendMessage(INVOKER_NO_PERMISSION.asErrorMessage());
 		}
 	}
 

@@ -18,27 +18,34 @@
 
 package name.richardson.james.bukkit.utilities.command.argument;
 
-import name.richardson.james.bukkit.utilities.localisation.Localised;
+public final class SimpleArgumentMetadata implements ArgumentMetadata {
 
-public class SimpleArgumentMetadata implements ArgumentMetadata {
-
+	private final String desc;
 	private final String id;
 	private final String name;
-	private final String desc;
-
 	private String error;
 
-	public SimpleArgumentMetadata(Localised id, Localised name, Localised desc, Localised error) {
-		this.id = id.asMessage();
-		this.name = name.asMessage();
-		this.desc = desc.asMessage();
-		this.error = error.asMessage();
+	public SimpleArgumentMetadata(String id, String name, String desc, String error) {
+		this.id = id;
+		this.name = name;
+		this.desc = desc;
+		this.error = error;
 	}
 
-	public SimpleArgumentMetadata(Localised id, Localised name, Localised desc) {
-		this.id = id.asMessage();
-		this.name = name.asMessage();
-		this.desc = desc.asMessage();
+	public SimpleArgumentMetadata(String id, String name, String desc) {
+		this.id = id;
+		this.name = name;
+		this.desc = desc;
+	}
+
+	@Override
+	public String getDescription() {
+		return desc;
+	}
+
+	@Override
+	public String getError() {
+		return error;
 	}
 
 	@Override
@@ -49,15 +56,5 @@ public class SimpleArgumentMetadata implements ArgumentMetadata {
 	@Override
 	public String getName() {
 		return name;
-	}
-
-	@Override
-	public String getError() {
-		return error;
-	}
-
-	@Override
-	public String getDescription() {
-		return desc;
 	}
 }
