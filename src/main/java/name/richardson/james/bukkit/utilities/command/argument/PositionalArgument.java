@@ -22,7 +22,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import name.richardson.james.bukkit.utilities.command.argument.suggester.Suggester;
 

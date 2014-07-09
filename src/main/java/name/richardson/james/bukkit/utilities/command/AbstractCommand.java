@@ -18,11 +18,15 @@
 
 package name.richardson.james.bukkit.utilities.command;
 
+import java.lang.annotation.Annotation;
 import java.util.Collection;
 import java.util.Set;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.permissions.Permissible;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitScheduler;
 
 import org.apache.commons.lang.Validate;
 
@@ -33,11 +37,16 @@ import name.richardson.james.bukkit.utilities.command.argument.SimpleArgumentInv
 
 public abstract class AbstractCommand implements Command {
 
+	private final CommandPermissions annotation;
 	private final ArgumentInvoker argumentInvoker;
-	private CommandContext context;
+	private final Plugin plugin;
+	private final BukkitScheduler scheduler;
 
-	public AbstractCommand() {
+	public AbstractCommand(Plugin plugin, BukkitScheduler scheduler) {
+		this.plugin = plugin;
+		this.scheduler = scheduler;
 		argumentInvoker = new SimpleArgumentInvoker();
+		annotation = this.getClass().getAnnotation(CommandPermissions.class);
 	}
 
 	@Override
@@ -56,6 +65,28 @@ public abstract class AbstractCommand implements Command {
 		return ChatColor.YELLOW + getName() + " " + arguments;
 	}
 
+	/**
+	 * Returns {@code true} if the user is authorised to use this command. <p/> Authorisation does not guarantee that the user may use all the features associated
+	 * with a command.
+	 *
+	 * @param permissible the permissible requesting authorisation
+	 * @return {@code true} if the user is authorised; {@code false} otherwise
+	 * @since 6.0.0
+	 */
+	@Override public boolean isAuthorised(final Permissible permissible) {
+		boolean result = false;
+		if (getAnnotation() != null) {
+			for (String permission : getAnnotation().permissions()) {
+				if (permissible.hasPermission(permission)) {
+					result = true;
+				}
+			}
+		} else {
+			result = true;
+		}
+		return result;
+	}
+
 	@Override
 	public final void parseArguments(final String arguments)
 	throws InvalidArgumentException {
@@ -67,7 +98,7 @@ public abstract class AbstractCommand implements Command {
 		argumentInvoker.removeArgument(argument);
 	}
 
-	public final void run() {
+	public synchronized final void run() {
 		Validate.notNull(getContext());
 		if (isAuthorised(getContext().getCommandSender())) {
 			try {
@@ -85,19 +116,24 @@ public abstract class AbstractCommand implements Command {
 	}
 
 	@Override
-	public void setContext(final CommandContext context) {
-		this.context = context;
-	}
-
-	@Override
 	public final Set<String> suggestArguments(final String arguments) {
 		return argumentInvoker.suggestArguments(arguments);
 	}
 
 	protected abstract void execute();
 
-	protected final CommandContext getContext() {
-		return context;
+	protected final CommandPermissions getAnnotation() {
+		return annotation;
+	}
+
+	protected abstract CommandContext getContext();
+
+	protected final Plugin getPlugin() {
+		return plugin;
+	}
+
+	protected final BukkitScheduler getScheduler() {
+		return scheduler;
 	}
 
 	private String getColouredArgumentUsage() {

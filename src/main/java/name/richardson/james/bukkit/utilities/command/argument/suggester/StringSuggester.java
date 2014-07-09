@@ -2,8 +2,6 @@ package name.richardson.james.bukkit.utilities.command.argument.suggester;
 
 import java.util.*;
 
-import com.sun.org.apache.regexp.internal.recompile;
-
 public final class StringSuggester implements Suggester {
 
 	private Collection<String> strings = new HashSet<String>();

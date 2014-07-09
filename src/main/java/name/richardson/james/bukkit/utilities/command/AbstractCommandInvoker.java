@@ -72,15 +72,6 @@ public abstract class AbstractCommandInvoker implements CommandInvoker {
 		return Collections.unmodifiableMap(commandMap);
 	}
 
-	protected void scheduleCommand(Command command, CommandContext context) {
-		command.setContext(context);
-		if (command.isAsynchronousCommand()) {
-			getScheduler().runTaskAsynchronously(getPlugin(), command);
-		} else {
-			getScheduler().runTask(getPlugin(), command);
-		}
-	}
-
 	protected Command getCommand(String[] arguments) {
 		String name = (arguments.length == 0) ? null : arguments[0];
 		if (name != null && getCommands().containsKey(name)) {
@@ -105,4 +96,5 @@ public abstract class AbstractCommandInvoker implements CommandInvoker {
 	protected final BukkitScheduler getScheduler() {
 		return scheduler;
 	}
+
 }

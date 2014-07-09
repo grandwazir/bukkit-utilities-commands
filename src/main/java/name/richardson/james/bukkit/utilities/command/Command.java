@@ -18,6 +18,8 @@
 
 package name.richardson.james.bukkit.utilities.command;
 
+import java.util.Map;
+
 import org.bukkit.permissions.Permissible;
 
 import name.richardson.james.bukkit.utilities.command.argument.ArgumentInvoker;
@@ -29,14 +31,11 @@ import name.richardson.james.bukkit.utilities.command.argument.ArgumentInvoker;
 public interface Command extends Runnable, ArgumentInvoker {
 
 	/**
-	 * Returns {@code true} if the user is authorised to use this command. <p/> Authorisation does not guarantee that the user may use all the features associated
-	 * with a command.
+	 * Returns a brief description of what this command does.
 	 *
-	 * @param permissible the permissible requesting authorisation
-	 * @return {@code true} if the user is authorised; {@code false} otherwise
-	 * @since 6.0.0
+	 * @return the localised description of the command
 	 */
-	public boolean isAuthorised(Permissible permissible);
+	public String getDescription();
 
 	/**
 	 * Return the short name of this command.
@@ -46,11 +45,15 @@ public interface Command extends Runnable, ArgumentInvoker {
 	public String getName();
 
 	/**
-	 * Returns a brief description of what this command does.
+	 * Returns a map containing details of all the permissions the player has.
 	 *
-	 * @return the localised description of the command
+	 * The key is the name of the permission and the value is if the player has that
+	 * permission or not.
+	 *
+	 * @param permissible
+	 * @return the permissions the player has.
 	 */
-	public String getDescription();
+	public Map<String, Boolean> getPermissionMap(Permissible permissible);
 
 	/**
 	 * Returns the arguments that can be passed to this command.
@@ -60,12 +63,15 @@ public interface Command extends Runnable, ArgumentInvoker {
 	public String getUsage();
 
 	/**
-	 * Set the command context that this command will run within
+	 * Returns {@code true} if the user is authorised to use this command. <p/> Authorisation does not guarantee that the user may use all the features associated
+	 * with a command.
 	 *
-	 * @param context
+	 * @param permissible the permissible requesting authorisation
+	 * @return {@code true} if the user is authorised; {@code false} otherwise
+	 * @since 6.0.0
 	 */
-	public void setContext(CommandContext context);
+	public boolean isAuthorised(Permissible permissible);
 
-	public boolean isAsynchronousCommand();
+	public void schedule(CommandContext context);
 
 }

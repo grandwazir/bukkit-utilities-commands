@@ -18,24 +18,53 @@
 
 package name.richardson.james.bukkit.utilities.command;
 
-import java.util.*;
-
-import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permissible;
-
-import name.richardson.james.bukkit.utilities.command.argument.Argument;
-import name.richardson.james.bukkit.utilities.command.argument.ArgumentMetadata;
-import name.richardson.james.bukkit.utilities.command.argument.PositionalArgument;
-import name.richardson.james.bukkit.utilities.command.argument.SimpleArgumentMetadata;
-import name.richardson.james.bukkit.utilities.command.argument.suggester.StringSuggester;
-import name.richardson.james.bukkit.utilities.command.argument.suggester.Suggester;
-
-import static name.richardson.james.bukkit.utilities.localisation.BukkitUtilities.*;
 
 public final class HelpCommand extends AbstractCommand {
 
-	private final Argument argument;
+	public HelpCommand() {
+		super(plugin, scheduler);
+	}
+
+	/**
+	 * Returns {@code true} if the user is authorised to use this command. <p/> Authorisation does not guarantee that the user may use all the features associated
+	 * with a command.
+	 *
+	 * @param permissible the permissible requesting authorisation
+	 * @return {@code true} if the user is authorised; {@code false} otherwise
+	 * @since 6.0.0
+	 */
+	@Override public boolean isAuthorised(final Permissible permissible) {
+		return false;
+	}
+
+	/**
+	 * Return the short name of this command.
+	 *
+	 * @return the localised name of the command
+	 */
+	@Override public String getName() {
+		return null;
+	}
+
+	/**
+	 * Returns a brief description of what this command does.
+	 *
+	 * @return the localised description of the command
+	 */
+	@Override public String getDescription() {
+		return null;
+	}
+
+	@Override public boolean isAsynchronousCommand() {
+		return false;
+	}
+
+	@Override protected void execute() {
+
+	}
+
+	/*private final Argument argument;
 	private final Argument command;
 	private final Map<String, Command> commands = new TreeMap<String, Command>();
 	private final String usagePrefix;
@@ -95,6 +124,6 @@ public final class HelpCommand extends AbstractCommand {
 		for (Command command : commands) {
 			this.commands.put(command.getName(), command);
 		}
-	}
+	}*/
 
 }
