@@ -48,8 +48,10 @@ public class OnlinePlayerSuggester implements Suggester {
 		TreeSet<String> results = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
 		argument = argument.toLowerCase(Locale.ENGLISH);
 		for (Player player : server.getOnlinePlayers()) {
-			if (results.size() == Suggester.MAX_MATCHES) break;
-			if (!player.getName().toLowerCase(Locale.ENGLISH).startsWith(argument)) continue;
+			if (results.size() == Suggester.MAX_MATCHES)
+				break;
+			if (!player.getName().toLowerCase(Locale.ENGLISH).startsWith(argument))
+				continue;
 			results.add(player.getName());
 		}
 		return results;
@@ -62,5 +64,4 @@ public class OnlinePlayerSuggester implements Suggester {
 		sb.append('}');
 		return sb.toString();
 	}
-
 }

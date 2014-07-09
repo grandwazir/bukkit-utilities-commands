@@ -42,7 +42,7 @@ public class RequiredOptionArgument extends OptionArgument {
 	@Override
 	public void parseValue(final String argument) {
 		super.parseValue(argument);
-		if (getString() == null) throw new InvalidArgumentException(getError());
+		if (getString() == null)
+			throw new InvalidArgumentException(getError());
 	}
-
 }

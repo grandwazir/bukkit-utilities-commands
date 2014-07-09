@@ -15,7 +15,6 @@
  You should have received a copy of the GNU General Public License along with
  BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
-
 package name.richardson.james.bukkit.utilities.command;
 
 import org.bukkit.command.CommandSender;
@@ -27,16 +26,13 @@ import org.bukkit.command.CommandSender;
  */
 public interface CommandContext {
 
+	String getArguments();
+
 	/**
 	 * Get the CommandSender who called this command.
 	 *
 	 * @return the CommandSender
 	 */
 	CommandSender getCommandSender();
-
 	boolean isConsoleCommandSender();
-
-	String getArguments();
-
-
 }

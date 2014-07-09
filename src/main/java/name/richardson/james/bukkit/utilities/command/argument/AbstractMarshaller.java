@@ -65,8 +65,7 @@ public abstract class AbstractMarshaller implements Argument {
 	}
 
 	@Override
-	public void parseValue(final String argument)
-	throws InvalidArgumentException {
+	public void parseValue(final String argument) throws InvalidArgumentException {
 		this.argument.parseValue(argument);
 	}
 
@@ -79,5 +78,4 @@ public abstract class AbstractMarshaller implements Argument {
 	public Set<String> suggestValue(final String argument) {
 		return this.argument.suggestValue(argument);
 	}
-
 }

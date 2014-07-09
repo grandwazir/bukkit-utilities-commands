@@ -37,5 +37,4 @@ public interface Suggester {
 	 * @return the set of possible matches.
 	 */
 	public Set<String> suggestValue(String argument);
-
 }

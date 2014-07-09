@@ -29,5 +29,4 @@ public class InvalidArgumentException extends RuntimeException {
 	public String getError() {
 		return error;
 	}
-
 }

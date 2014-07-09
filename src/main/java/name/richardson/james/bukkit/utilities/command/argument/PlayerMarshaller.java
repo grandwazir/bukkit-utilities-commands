@@ -45,9 +45,9 @@ public class PlayerMarshaller extends AbstractMarshaller {
 		Set<Player> players = new HashSet<Player>();
 		for (String playerName : getStrings()) {
 			Player player = server.getPlayerExact(playerName);
-			if (player != null) players.add(player);
+			if (player != null)
+				players.add(player);
 		}
 		return players;
 	}
-
 }

@@ -20,8 +20,6 @@ package name.richardson.james.bukkit.utilities.command;
 
 import org.bukkit.command.CommandSender;
 
-import name.richardson.james.bukkit.utilities.command.AbstractCommandContext;
-
 /**
  * This implementation of CommandContext is simply an unmodified extension of AbstractCommandContext.
  */
@@ -31,11 +29,9 @@ public class PassthroughCommandContext extends AbstractCommandContext {
 	 * Constructs a PassthroughCommandContext from the provided arguments and CommandSender.
 	 *
 	 * @param arguments provided arguments
-	 * @param sender the CommandSender executing the command
+	 * @param sender    the CommandSender executing the command
 	 */
 	public PassthroughCommandContext(String[] arguments, CommandSender sender) {
 		super(arguments, sender);
 	}
-
-
 }

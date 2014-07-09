@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (c) 2014 James Richardson.
  *
  * AbstractCommand.java is part of BukkitUtilities.
@@ -18,22 +18,20 @@
 
 package name.richardson.james.bukkit.utilities.command;
 
-import java.lang.annotation.Annotation;
 import java.util.Collection;
 import java.util.Set;
-
-import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.permissions.Permissible;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitScheduler;
-
-import org.apache.commons.lang.Validate;
 
 import name.richardson.james.bukkit.utilities.command.argument.Argument;
 import name.richardson.james.bukkit.utilities.command.argument.ArgumentInvoker;
 import name.richardson.james.bukkit.utilities.command.argument.InvalidArgumentException;
 import name.richardson.james.bukkit.utilities.command.argument.SimpleArgumentInvoker;
+
+import org.apache.commons.lang.Validate;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.permissions.Permissible;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitScheduler;
 
 public abstract class AbstractCommand implements Command {
 
@@ -73,7 +71,8 @@ public abstract class AbstractCommand implements Command {
 	 * @return {@code true} if the user is authorised; {@code false} otherwise
 	 * @since 6.0.0
 	 */
-	@Override public boolean isAuthorised(final Permissible permissible) {
+	@Override
+	public boolean isAuthorised(final Permissible permissible) {
 		boolean result = false;
 		if (getAnnotation() != null) {
 			for (String permission : getAnnotation().permissions()) {
@@ -88,8 +87,7 @@ public abstract class AbstractCommand implements Command {
 	}
 
 	@Override
-	public final void parseArguments(final String arguments)
-	throws InvalidArgumentException {
+	public final void parseArguments(final String arguments) throws InvalidArgumentException {
 		argumentInvoker.parseArguments(arguments);
 	}
 
@@ -142,5 +140,4 @@ public abstract class AbstractCommand implements Command {
 		usage = usage.replaceAll("\\[", ChatColor.GREEN + "\\[");
 		return usage;
 	}
-
 }

@@ -15,8 +15,10 @@ public final class StringSuggester implements Suggester {
 		TreeSet<String> results = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
 		argument = argument.toLowerCase(Locale.ENGLISH);
 		for (String string : this.strings) {
-			if (results.size() == Suggester.MAX_MATCHES) break;
-			if (!string.toLowerCase(Locale.ENGLISH).startsWith(argument)) continue;
+			if (results.size() == Suggester.MAX_MATCHES)
+				break;
+			if (!string.toLowerCase(Locale.ENGLISH).startsWith(argument))
+				continue;
 			results.add(string);
 		}
 		return results;

@@ -32,7 +32,6 @@ public interface Argument extends ArgumentMetadata, Suggester {
 
 	/**
 	 * Get the value of this argument.
-	 *
 	 * This will vary based on implementation and may return null. In case that there are multiple values this will return the first value in the list.
 	 *
 	 * @return value the value of the argument.
@@ -41,7 +40,6 @@ public interface Argument extends ArgumentMetadata, Suggester {
 
 	/**
 	 * Get all the values supplied to this argument.
-	 *
 	 * Arguments are able to support list of values separated by a specific character.
 	 *
 	 * @return values all the parsed values
@@ -50,7 +48,6 @@ public interface Argument extends ArgumentMetadata, Suggester {
 
 	/**
 	 * Check to see if this argument is the last argument.
-	 *
 	 * This does not mean that this would be the last argument to actually parse the value, more that this argument was provided last by the user.
 	 *
 	 * @param arguments
@@ -66,7 +63,5 @@ public interface Argument extends ArgumentMetadata, Suggester {
 	 * @param argument
 	 * @throws InvalidArgumentException
 	 */
-	public void parseValue(String argument)
-	throws InvalidArgumentException;
-
+	public void parseValue(String argument) throws InvalidArgumentException;
 }

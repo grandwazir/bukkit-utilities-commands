@@ -49,5 +49,4 @@ public interface CommandInvoker extends TabExecutor {
 	 * @return the map of commands with the command name as the key
 	 */
 	public Map<String, Command> getCommands();
-
 }

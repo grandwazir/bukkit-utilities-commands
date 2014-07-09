@@ -63,7 +63,6 @@ public class SwitchArgument extends AbstractArgument {
 		return builder.toString();
 	}
 
-
 	@Override
 	protected String[] getMatch(final String argument) {
 		String[] values = new String[1];
@@ -77,5 +76,4 @@ public class SwitchArgument extends AbstractArgument {
 		}
 		return values;
 	}
-
 }

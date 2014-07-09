@@ -1,6 +1,9 @@
 package name.richardson.james.bukkit.utilities.command;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
 
 import org.bukkit.permissions.Permissible;
 import org.bukkit.plugin.Plugin;
@@ -14,7 +17,8 @@ public abstract class AbstractSynchronousCommand extends AbstractCommand {
 		super(plugin, scheduler);
 	}
 
-	@Override public Map<String, Boolean> getPermissionMap(final Permissible permissible) {
+	@Override
+	public Map<String, Boolean> getPermissionMap(final Permissible permissible) {
 		Map<String, Boolean> map = new HashMap<String, Boolean>();
 		if (getAnnotation() != null) {
 			for (String permission : getAnnotation().permissions()) {
@@ -25,13 +29,14 @@ public abstract class AbstractSynchronousCommand extends AbstractCommand {
 		return map;
 	}
 
-	@Override public void schedule(final CommandContext context) {
+	@Override
+	public void schedule(final CommandContext context) {
 		contexts.add(context);
 		this.getScheduler().runTask(getPlugin(), this);
 	}
 
-	@Override protected CommandContext getContext() {
+	@Override
+	protected CommandContext getContext() {
 		return contexts.remove();
 	}
-
 }

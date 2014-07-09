@@ -20,7 +20,8 @@ public abstract class AbstractAsyncronousCommand extends AbstractCommand {
 		super(plugin, scheduler);
 	}
 
-	@Override public Map<String, Boolean> getPermissionMap(Permissible permissible) {
+	@Override
+	public Map<String, Boolean> getPermissionMap(Permissible permissible) {
 		Map<String, Boolean> result = new HashMap<String, Boolean>();
 		if (getAnnotation() != null) {
 			Callable<Map<String, Boolean>> task = new PermissionTask(permissible, getAnnotation().permissions());
@@ -36,13 +37,14 @@ public abstract class AbstractAsyncronousCommand extends AbstractCommand {
 		return result;
 	}
 
-
-	@Override public void schedule(final CommandContext context) {
+	@Override
+	public void schedule(final CommandContext context) {
 		contexts.add(context);
 		this.getScheduler().runTaskAsynchronously(getPlugin(), this);
 	}
 
-	@Override protected CommandContext getContext() {
+	@Override
+	protected CommandContext getContext() {
 		return contexts.remove();
 	}
 
@@ -59,8 +61,8 @@ public abstract class AbstractAsyncronousCommand extends AbstractCommand {
 			map = new HashMap<String, Boolean>(permissions.length);
 		}
 
-		@Override public Map<String, Boolean> call()
-		throws Exception {
+		@Override
+		public Map<String, Boolean> call() throws Exception {
 			for (String permission : permissions) {
 				boolean result = permissible.hasPermission(permission);
 				map.put(permission, result);
@@ -68,6 +70,5 @@ public abstract class AbstractAsyncronousCommand extends AbstractCommand {
 			done = true;
 			return map;
 		}
-
 	}
 }

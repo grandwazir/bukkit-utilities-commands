@@ -44,7 +44,6 @@ public class JoinedPositionalArgument extends PositionalArgument {
 		return builder.toString();
 	}
 
-
 	@Override
 	protected String[] getMatch(final String arguments) {
 		String[] values = null;
@@ -56,5 +55,4 @@ public class JoinedPositionalArgument extends PositionalArgument {
 		}
 		return values;
 	}
-
 }

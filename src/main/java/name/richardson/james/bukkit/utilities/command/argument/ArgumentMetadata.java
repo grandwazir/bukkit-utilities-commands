@@ -27,5 +27,4 @@ public interface ArgumentMetadata {
 	public String getError();
 
 	public String getDescription();
-
 }

@@ -50,8 +50,10 @@ public class OfflinePlayerSuggester implements Suggester {
 		TreeSet<String> results = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
 		argument = argument.toLowerCase(Locale.ENGLISH);
 		for (OfflinePlayer player : server.getOfflinePlayers()) {
-			if (results.size() == Suggester.MAX_MATCHES) break;
-			if (!player.getName().toLowerCase(Locale.ENGLISH).startsWith(argument)) continue;
+			if (results.size() == Suggester.MAX_MATCHES)
+				break;
+			if (!player.getName().toLowerCase(Locale.ENGLISH).startsWith(argument))
+				continue;
 			results.add(player.getName());
 		}
 		return results;
@@ -64,5 +66,4 @@ public class OfflinePlayerSuggester implements Suggester {
 		sb.append('}');
 		return sb.toString();
 	}
-
 }

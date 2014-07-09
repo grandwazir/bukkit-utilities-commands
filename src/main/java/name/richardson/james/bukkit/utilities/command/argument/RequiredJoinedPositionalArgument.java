@@ -32,14 +32,12 @@ public class RequiredJoinedPositionalArgument extends JoinedPositionalArgument {
 		return builder.toString();
 	}
 
-
 	@Override
-	public void parseValue(final String argument)
-	throws InvalidArgumentException {
+	public void parseValue(final String argument) throws InvalidArgumentException {
 		super.parseValue(argument);
-		if (getString() == null) throw new InvalidArgumentException(getError());
+		if (getString() == null)
+			throw new InvalidArgumentException(getError());
 	}
-
 }
 
 

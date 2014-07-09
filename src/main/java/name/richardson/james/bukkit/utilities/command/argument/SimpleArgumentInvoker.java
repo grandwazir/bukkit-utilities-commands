@@ -20,9 +20,8 @@ package name.richardson.james.bukkit.utilities.command.argument;
 
 import java.util.*;
 
-import org.bukkit.ChatColor;
-
 import org.apache.commons.lang.Validate;
+import org.bukkit.ChatColor;
 
 public class SimpleArgumentInvoker implements ArgumentInvoker {
 
@@ -35,8 +34,7 @@ public class SimpleArgumentInvoker implements ArgumentInvoker {
 	}
 
 	@Override
-	public void parseArguments(final String arguments)
-	throws InvalidArgumentException {
+	public void parseArguments(final String arguments) throws InvalidArgumentException {
 		for (Argument argument : this.arguments) {
 			argument.parseValue(arguments);
 		}
@@ -86,5 +84,4 @@ public class SimpleArgumentInvoker implements ArgumentInvoker {
 		}
 		return builder.toString().trim();
 	}
-
 }

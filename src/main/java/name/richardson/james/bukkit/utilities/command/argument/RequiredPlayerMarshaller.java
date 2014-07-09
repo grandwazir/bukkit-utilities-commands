@@ -32,15 +32,16 @@ public class RequiredPlayerMarshaller extends PlayerMarshaller {
 	@Override
 	public Set<Player> getPlayers() {
 		Set<Player> players = super.getPlayers();
-		if (players.isEmpty()) throw new InvalidArgumentException(getError());
+		if (players.isEmpty())
+			throw new InvalidArgumentException(getError());
 		return players;
 	}
 
 	@Override
 	public Player getPlayer() {
 		Player player = super.getPlayer();
-		if (player == null) throw new InvalidArgumentException(getError());
+		if (player == null)
+			throw new InvalidArgumentException(getError());
 		return player;
 	}
-
 }

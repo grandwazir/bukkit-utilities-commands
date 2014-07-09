@@ -80,5 +80,4 @@ public class OptionArgument extends AbstractArgument {
 	public static Pattern getPattern() {
 		return OPTION_PATTERN;
 	}
-
 }

@@ -20,9 +20,9 @@ package name.richardson.james.bukkit.utilities.command;
 
 import java.util.Map;
 
-import org.bukkit.permissions.Permissible;
-
 import name.richardson.james.bukkit.utilities.command.argument.ArgumentInvoker;
+
+import org.bukkit.permissions.Permissible;
 
 /**
  * Executes actions on behalf of a user, notifies the user of the outcome. Used anywhere where a user is required instructions to a plugin interactively.
@@ -46,7 +46,6 @@ public interface Command extends Runnable, ArgumentInvoker {
 
 	/**
 	 * Returns a map containing details of all the permissions the player has.
-	 *
 	 * The key is the name of the permission and the value is if the player has that
 	 * permission or not.
 	 *
@@ -73,5 +72,4 @@ public interface Command extends Runnable, ArgumentInvoker {
 	public boolean isAuthorised(Permissible permissible);
 
 	public void schedule(CommandContext context);
-
 }

@@ -29,5 +29,4 @@ public class BooleanMarshaller extends AbstractMarshaller {
 	public boolean isSet() {
 		return (getString() != null);
 	}
-
 }

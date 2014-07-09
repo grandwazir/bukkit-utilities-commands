@@ -34,7 +34,8 @@ public final class HelpCommand extends AbstractCommand {
 	 * @return {@code true} if the user is authorised; {@code false} otherwise
 	 * @since 6.0.0
 	 */
-	@Override public boolean isAuthorised(final Permissible permissible) {
+	@Override
+	public boolean isAuthorised(final Permissible permissible) {
 		return false;
 	}
 
@@ -43,7 +44,8 @@ public final class HelpCommand extends AbstractCommand {
 	 *
 	 * @return the localised name of the command
 	 */
-	@Override public String getName() {
+	@Override
+	public String getName() {
 		return null;
 	}
 
@@ -52,15 +54,18 @@ public final class HelpCommand extends AbstractCommand {
 	 *
 	 * @return the localised description of the command
 	 */
-	@Override public String getDescription() {
+	@Override
+	public String getDescription() {
 		return null;
 	}
 
-	@Override public boolean isAsynchronousCommand() {
+	@Override
+	public boolean isAsynchronousCommand() {
 		return false;
 	}
 
-	@Override protected void execute() {
+	@Override
+	protected void execute() {
 
 	}
 
@@ -125,5 +130,4 @@ public final class HelpCommand extends AbstractCommand {
 			this.commands.put(command.getName(), command);
 		}
 	}*/
-
 }

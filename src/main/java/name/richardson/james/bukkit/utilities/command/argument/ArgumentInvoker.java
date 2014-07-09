@@ -27,13 +27,11 @@ public interface ArgumentInvoker {
 
 	public String getUsage();
 
-	public void parseArguments(String arguments)
-	throws InvalidArgumentException;
+	public void parseArguments(String arguments) throws InvalidArgumentException;
 
 	public Set<String> suggestArguments(String arguments);
 
 	public void removeArgument(Argument argument);
 
 	public Collection<String> getExtendedUsage();
-
 }

@@ -23,9 +23,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 
-import org.apache.commons.lang.StringUtils;
-
 import name.richardson.james.bukkit.utilities.command.argument.suggester.Suggester;
+
+import org.apache.commons.lang.StringUtils;
 
 public abstract class AbstractArgument implements Argument, ArgumentMetadata {
 
@@ -55,7 +55,8 @@ public abstract class AbstractArgument implements Argument, ArgumentMetadata {
 	public void parseValue(final String argument) {
 		setValue(null);
 		String[] match = getMatch(argument);
-		if (match != null) setValues(match);
+		if (match != null)
+			setValues(match);
 	}
 
 	public final String getError() {
@@ -71,7 +72,8 @@ public abstract class AbstractArgument implements Argument, ArgumentMetadata {
 	public String getString() {
 		String value = null;
 		Iterator<String> iterator = values.iterator();
-		if (iterator.hasNext()) value = iterator.next();
+		if (iterator.hasNext())
+			value = iterator.next();
 		return value;
 	}
 
@@ -100,6 +102,4 @@ public abstract class AbstractArgument implements Argument, ArgumentMetadata {
 			this.values.add(value);
 		}
 	}
-
-
 }

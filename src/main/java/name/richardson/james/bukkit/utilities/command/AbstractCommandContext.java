@@ -18,11 +18,10 @@
 
 package name.richardson.james.bukkit.utilities.command;
 
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 /**
  * An example implementation of {@link name.richardson.james.bukkit.utilities.command.CommandContext}. This implementation makes no additional verification checks on requested argumentsList and may throw
@@ -36,7 +35,7 @@ public class AbstractCommandContext implements CommandContext {
 	/**
 	 * Constructs a new AbstractCommandContext with the argumentsList and CommandSender.
 	 *
-	 * @param arguments provided argumentsList
+	 * @param arguments     provided argumentsList
 	 * @param commandSender the CommandSender executing the command
 	 */
 	public AbstractCommandContext(String[] arguments, CommandSender commandSender) {
@@ -74,5 +73,4 @@ public class AbstractCommandContext implements CommandContext {
 		sb.append('}');
 		return sb.toString();
 	}
-
 }

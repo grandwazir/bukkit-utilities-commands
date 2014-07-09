@@ -21,9 +21,9 @@ package name.richardson.james.bukkit.utilities.command.argument;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.commons.lang.StringUtils;
-
 import name.richardson.james.bukkit.utilities.command.argument.suggester.Suggester;
+
+import org.apache.commons.lang.StringUtils;
 
 public class PositionalArgument extends AbstractArgument {
 
@@ -38,7 +38,8 @@ public class PositionalArgument extends AbstractArgument {
 	public void parseValue(String argument) {
 		setValue(null);
 		String[] arguments = getMatch(argument);
-		if (arguments != null && arguments.length > 0) setValues(arguments);
+		if (arguments != null && arguments.length > 0)
+			setValues(arguments);
 	}
 
 	protected String[] getMatch(String arguments) {
@@ -59,7 +60,6 @@ public class PositionalArgument extends AbstractArgument {
 		builder.append("]");
 		return builder.toString();
 	}
-
 
 	protected final String[] removeOptionsAndSwitches(String arguments) {
 		arguments = arguments.replaceAll(OptionArgument.getPattern().toString(), "");
@@ -88,5 +88,4 @@ public class PositionalArgument extends AbstractArgument {
 	public boolean isLastArgument(String arguments) {
 		return removeOptionsAndSwitches(arguments).length - 1 == getPosition();
 	}
-
 }
