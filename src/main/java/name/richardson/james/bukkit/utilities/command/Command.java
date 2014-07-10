@@ -59,6 +59,7 @@ public interface Command extends Runnable, ArgumentInvoker {
 	 *
 	 * @return the localised usage message
 	 */
+	@Override
 	public String getUsage();
 
 	/**
@@ -71,5 +72,11 @@ public interface Command extends Runnable, ArgumentInvoker {
 	 */
 	public boolean isAuthorised(Permissible permissible);
 
+	/**
+	 * Schedule this command for execution using the provided CommandContext.
+	 *
+	 * This allows for implementations to override this method to allow for Asyncronous or Syncronous execution.
+	 * @param context
+	 */
 	public void schedule(CommandContext context);
 }

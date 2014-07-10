@@ -48,17 +48,17 @@ public abstract class AbstractCommand implements Command {
 	}
 
 	@Override
-	public final void addArgument(final Argument argument) {
+	public void addArgument(Argument argument) {
 		argumentInvoker.addArgument(argument);
 	}
 
 	@Override
-	public final Collection<String> getExtendedUsage() {
+	public Collection<String> getExtendedUsage() {
 		return argumentInvoker.getExtendedUsage();
 	}
 
 	@Override
-	public final String getUsage() {
+	public String getUsage() {
 		String arguments = getColouredArgumentUsage();
 		return ChatColor.YELLOW + getName() + " " + arguments;
 	}
@@ -72,7 +72,7 @@ public abstract class AbstractCommand implements Command {
 	 * @since 6.0.0
 	 */
 	@Override
-	public boolean isAuthorised(final Permissible permissible) {
+	public boolean isAuthorised(Permissible permissible) {
 		boolean result = false;
 		if (getAnnotation() != null) {
 			for (String permission : getAnnotation().permissions()) {
@@ -87,16 +87,17 @@ public abstract class AbstractCommand implements Command {
 	}
 
 	@Override
-	public final void parseArguments(final String arguments) throws InvalidArgumentException {
+	public void parseArguments(String arguments) throws InvalidArgumentException {
 		argumentInvoker.parseArguments(arguments);
 	}
 
 	@Override
-	public final void removeArgument(final Argument argument) {
+	public void removeArgument(Argument argument) {
 		argumentInvoker.removeArgument(argument);
 	}
 
-	public synchronized final void run() {
+	@Override
+	public synchronized void run() {
 		Validate.notNull(getContext());
 		if (isAuthorised(getContext().getCommandSender())) {
 			try {
@@ -114,23 +115,23 @@ public abstract class AbstractCommand implements Command {
 	}
 
 	@Override
-	public final Set<String> suggestArguments(final String arguments) {
+	public Set<String> suggestArguments(String arguments) {
 		return argumentInvoker.suggestArguments(arguments);
 	}
 
 	protected abstract void execute();
 
-	protected final CommandPermissions getAnnotation() {
+	protected CommandPermissions getAnnotation() {
 		return annotation;
 	}
 
 	protected abstract CommandContext getContext();
 
-	protected final Plugin getPlugin() {
+	protected Plugin getPlugin() {
 		return plugin;
 	}
 
-	protected final BukkitScheduler getScheduler() {
+	protected BukkitScheduler getScheduler() {
 		return scheduler;
 	}
 

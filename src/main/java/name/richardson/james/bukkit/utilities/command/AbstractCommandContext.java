@@ -38,7 +38,7 @@ public class AbstractCommandContext implements CommandContext {
 	 * @param arguments     provided argumentsList
 	 * @param commandSender the CommandSender executing the command
 	 */
-	public AbstractCommandContext(String[] arguments, CommandSender commandSender) {
+	protected AbstractCommandContext(String[] arguments, CommandSender commandSender) {
 		Validate.notNull(arguments);
 		Validate.notNull(commandSender);
 		this.commandSender = commandSender;
@@ -67,7 +67,7 @@ public class AbstractCommandContext implements CommandContext {
 
 	@Override
 	public String toString() {
-		final StringBuilder sb = new StringBuilder("AbstractCommandContext{");
+		StringBuilder sb = new StringBuilder("AbstractCommandContext{");
 		sb.append("arguments='").append(arguments).append('\'');
 		sb.append(", commandSender=").append(commandSender);
 		sb.append('}');

@@ -33,7 +33,7 @@ public class NestedCommandContext extends AbstractCommandContext {
 	 * @param arguments provided arguments
 	 * @param sender    the CommandSender executing the command
 	 */
-	public NestedCommandContext(String[] arguments, CommandSender sender) {
+	protected NestedCommandContext(String[] arguments, CommandSender sender) {
 		super((String[]) ArrayUtils.remove(arguments, 0), sender);
 	}
 }

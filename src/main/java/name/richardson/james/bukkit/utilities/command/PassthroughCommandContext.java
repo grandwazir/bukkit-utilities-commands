@@ -31,7 +31,7 @@ public class PassthroughCommandContext extends AbstractCommandContext {
 	 * @param arguments provided arguments
 	 * @param sender    the CommandSender executing the command
 	 */
-	public PassthroughCommandContext(String[] arguments, CommandSender sender) {
+	protected PassthroughCommandContext(String[] arguments, CommandSender sender) {
 		super(arguments, sender);
 	}
 }

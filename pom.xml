@@ -32,12 +32,10 @@
             <version>[1.6.4,)</version>
             <scope>provided</scope>
         </dependency>
-        <!-- Test dependencies -->
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit-version}</version>
-            <scope>test</scope>
+            <groupId>com.vityuk</groupId>
+            <artifactId>ginger-core</artifactId>
+            <version>0.2.1</version>
         </dependency>
     </dependencies>
 

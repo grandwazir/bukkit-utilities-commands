@@ -33,20 +33,20 @@ public class FallthroughCommandInvoker extends AbstractCommandInvoker {
 
 	private final Command fallthroughCommand;
 
-	public FallthroughCommandInvoker(final Plugin plugin, final BukkitScheduler scheduler, Command command) {
+	protected FallthroughCommandInvoker(Plugin plugin, BukkitScheduler scheduler, Command command) {
 		super(plugin, scheduler);
 		this.fallthroughCommand = command;
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
-		Command selectedCommand = getCommand(args);
-		if (selectedCommand != null) {
-			CommandContext commandContext = new NestedCommandContext(args, sender);
-			scheduleCommand(selectedCommand, commandContext);
+	public boolean onCommand(CommandSender sender, org.bukkit.command.Command cmd, String label, String[] args) {
+		Command command = getCommand(args);
+		if (command != null) {
+			CommandContext context = new NestedCommandContext(args, sender);
+			command.schedule(context);
 		} else {
 			CommandContext commandContext = new PassthroughCommandContext(args, sender);
-			scheduleCommand(fallthroughCommand, commandContext);
+			fallthroughCommand.schedule(commandContext);
 		}
 		return true;
 	}
@@ -69,7 +69,7 @@ public class FallthroughCommandInvoker extends AbstractCommandInvoker {
 
 	@Override
 	public String toString() {
-		final StringBuilder sb = new StringBuilder("FallthroughCommandInvoker{");
+		StringBuilder sb = new StringBuilder("FallthroughCommandInvoker{");
 		sb.append("fallthroughCommand=").append(fallthroughCommand);
 		sb.append(", ").append(super.toString());
 		sb.append('}');

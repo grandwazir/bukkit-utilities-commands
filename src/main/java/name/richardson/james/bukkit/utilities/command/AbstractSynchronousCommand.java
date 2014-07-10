@@ -13,12 +13,12 @@ public abstract class AbstractSynchronousCommand extends AbstractCommand {
 
 	private Queue<CommandContext> contexts = new LinkedList<CommandContext>();
 
-	public AbstractSynchronousCommand(Plugin plugin, BukkitScheduler scheduler) {
+	protected AbstractSynchronousCommand(Plugin plugin, BukkitScheduler scheduler) {
 		super(plugin, scheduler);
 	}
 
 	@Override
-	public Map<String, Boolean> getPermissionMap(final Permissible permissible) {
+	public Map<String, Boolean> getPermissionMap(Permissible permissible) {
 		Map<String, Boolean> map = new HashMap<String, Boolean>();
 		if (getAnnotation() != null) {
 			for (String permission : getAnnotation().permissions()) {
@@ -30,7 +30,7 @@ public abstract class AbstractSynchronousCommand extends AbstractCommand {
 	}
 
 	@Override
-	public void schedule(final CommandContext context) {
+	public void schedule(CommandContext context) {
 		contexts.add(context);
 		this.getScheduler().runTask(getPlugin(), this);
 	}

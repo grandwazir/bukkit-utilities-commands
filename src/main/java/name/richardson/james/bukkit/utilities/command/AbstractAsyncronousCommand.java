@@ -16,7 +16,7 @@ public abstract class AbstractAsyncronousCommand extends AbstractCommand {
 
 	private Queue<CommandContext> contexts = new ConcurrentLinkedQueue<CommandContext>();
 
-	public AbstractAsyncronousCommand(Plugin plugin, BukkitScheduler scheduler) {
+	protected AbstractAsyncronousCommand(Plugin plugin, BukkitScheduler scheduler) {
 		super(plugin, scheduler);
 	}
 
@@ -25,7 +25,7 @@ public abstract class AbstractAsyncronousCommand extends AbstractCommand {
 		Map<String, Boolean> result = new HashMap<String, Boolean>();
 		if (getAnnotation() != null) {
 			Callable<Map<String, Boolean>> task = new PermissionTask(permissible, getAnnotation().permissions());
-			final Future<Map<String, Boolean>> future = getScheduler().callSyncMethod(null, task);
+			Future<Map<String, Boolean>> future = getScheduler().callSyncMethod(null, task);
 			try {
 				result = future.get();
 			} catch (InterruptedException e) {
@@ -38,7 +38,7 @@ public abstract class AbstractAsyncronousCommand extends AbstractCommand {
 	}
 
 	@Override
-	public void schedule(final CommandContext context) {
+	public void schedule(CommandContext context) {
 		contexts.add(context);
 		this.getScheduler().runTaskAsynchronously(getPlugin(), this);
 	}
@@ -55,7 +55,7 @@ public abstract class AbstractAsyncronousCommand extends AbstractCommand {
 		private boolean done = false;
 		private final Map<String, Boolean> map;
 
-		private PermissionTask(final Permissible permissible, String[] permissions) {
+		private PermissionTask(Permissible permissible, String ... permissions) {
 			this.permissible = permissible;
 			this.permissions = permissions;
 			map = new HashMap<String, Boolean>(permissions.length);

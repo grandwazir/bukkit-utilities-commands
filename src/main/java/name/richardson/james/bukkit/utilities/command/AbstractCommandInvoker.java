@@ -22,7 +22,10 @@ import java.util.*;
 
 import name.richardson.james.bukkit.utilities.command.argument.suggester.StringSuggester;
 import name.richardson.james.bukkit.utilities.command.argument.suggester.Suggester;
+import name.richardson.james.bukkit.utilities.command.localisation.LocalisedMessages;
 
+import com.vityuk.ginger.LocalizationBuilder;
+import com.vityuk.ginger.loader.LocalizationLoader;
 import org.apache.commons.lang.Validate;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -51,13 +54,13 @@ public abstract class AbstractCommandInvoker implements CommandInvoker {
 	}
 
 	@Override
-	public final void addCommand(Command command) {
+	public void addCommand(Command command) {
 		Validate.notNull(command);
 		commandMap.put(command.getName(), command);
 	}
 
 	@Override
-	public final void addCommands(Collection<Command> commands) {
+	public void addCommands(Collection<Command> commands) {
 		Validate.notNull(commands);
 		for (Command command : commands) {
 			commandMap.put(command.getName(), command);
@@ -65,7 +68,7 @@ public abstract class AbstractCommandInvoker implements CommandInvoker {
 	}
 
 	@Override
-	public final Map<String, Command> getCommands() {
+	public Map<String, Command> getCommands() {
 		return Collections.unmodifiableMap(commandMap);
 	}
 
@@ -80,17 +83,17 @@ public abstract class AbstractCommandInvoker implements CommandInvoker {
 
 	@Override
 	public String toString() {
-		final StringBuilder sb = new StringBuilder("AbstractCommandInvoker{");
+		StringBuilder sb = new StringBuilder("AbstractCommandInvoker{");
 		sb.append("commandMap=").append(commandMap);
 		sb.append('}');
 		return sb.toString();
 	}
 
-	protected final Plugin getPlugin() {
+	protected Plugin getPlugin() {
 		return plugin;
 	}
 
-	protected final BukkitScheduler getScheduler() {
+	protected BukkitScheduler getScheduler() {
 		return scheduler;
 	}
 }

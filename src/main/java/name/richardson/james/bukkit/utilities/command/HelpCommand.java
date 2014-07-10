@@ -19,10 +19,12 @@
 package name.richardson.james.bukkit.utilities.command;
 
 import org.bukkit.permissions.Permissible;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitScheduler;
 
-public final class HelpCommand extends AbstractCommand {
+public class HelpCommand extends AbstractSynchronousCommand {
 
-	public HelpCommand() {
+	public HelpCommand(Plugin plugin, BukkitScheduler scheduler) {
 		super(plugin, scheduler);
 	}
 
@@ -35,7 +37,7 @@ public final class HelpCommand extends AbstractCommand {
 	 * @since 6.0.0
 	 */
 	@Override
-	public boolean isAuthorised(final Permissible permissible) {
+	public boolean isAuthorised(Permissible permissible) {
 		return false;
 	}
 
@@ -57,11 +59,6 @@ public final class HelpCommand extends AbstractCommand {
 	@Override
 	public String getDescription() {
 		return null;
-	}
-
-	@Override
-	public boolean isAsynchronousCommand() {
-		return false;
 	}
 
 	@Override
