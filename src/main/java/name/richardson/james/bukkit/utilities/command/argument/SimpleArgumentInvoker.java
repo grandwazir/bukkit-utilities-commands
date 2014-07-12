@@ -25,23 +25,23 @@ import org.bukkit.ChatColor;
 
 public class SimpleArgumentInvoker implements ArgumentInvoker {
 
-	private List<Argument> arguments = new ArrayList<Argument>();
+	private final Collection<Argument> arguments = new ArrayList<Argument>();
 
 	@Override
-	public void addArgument(final Argument argument) {
+	public void addArgument(Argument argument) {
 		Validate.notNull(argument);
 		arguments.add(argument);
 	}
 
 	@Override
-	public void parseArguments(final String arguments) throws InvalidArgumentException {
+	public void parseArguments(String arguments) throws InvalidArgumentException {
 		for (Argument argument : this.arguments) {
 			argument.parseValue(arguments);
 		}
 	}
 
 	@Override
-	public Set<String> suggestArguments(final String arguments) {
+	public Set<String> suggestArguments(String arguments) {
 		Set<String> suggestions = new HashSet<String>();
 		for (Argument argument : this.arguments) {
 			if (argument.isLastArgument(arguments)) {
@@ -53,7 +53,7 @@ public class SimpleArgumentInvoker implements ArgumentInvoker {
 	}
 
 	@Override
-	public void removeArgument(final Argument argument) {
+	public void removeArgument(Argument argument) {
 		Validate.notNull(argument);
 		arguments.remove(argument);
 	}

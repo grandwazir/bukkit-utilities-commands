@@ -1,8 +1,6 @@
 package name.richardson.james.bukkit.utilities.command;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutionException;
@@ -53,16 +51,15 @@ public abstract class AbstractAsyncronousCommand extends AbstractCommand {
 		private final Permissible permissible;
 		private final String[] permissions;
 		private boolean done = false;
-		private final Map<String, Boolean> map;
 
 		private PermissionTask(Permissible permissible, String ... permissions) {
 			this.permissible = permissible;
 			this.permissions = permissions;
-			map = new HashMap<String, Boolean>(permissions.length);
 		}
 
 		@Override
 		public Map<String, Boolean> call() throws Exception {
+			HashMap<String, Boolean> map = new HashMap<String, Boolean>(permissions.length);
 			for (String permission : permissions) {
 				boolean result = permissible.hasPermission(permission);
 				map.put(permission, result);

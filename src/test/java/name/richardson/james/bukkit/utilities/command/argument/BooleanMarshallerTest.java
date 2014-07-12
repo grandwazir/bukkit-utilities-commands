@@ -29,7 +29,7 @@ import static org.mockito.Mockito.when;
 public class BooleanMarshallerTest {
 
 	private Argument argument;
-	private BooleanMarshaller marshaller;
+	private SimpleBooleanMarshaller marshaller;
 
 	@Test
 	public void shouldReturnTrueWhenArgumentIsSet() {
@@ -46,7 +46,7 @@ public class BooleanMarshallerTest {
 	@Before
 	public void setup() {
 		argument = mock(Argument.class);
-		marshaller = new BooleanMarshaller(argument);
+		marshaller = new SimpleBooleanMarshaller(argument);
 	}
 
 }

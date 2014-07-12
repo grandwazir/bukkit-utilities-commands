@@ -4,7 +4,7 @@ import com.vityuk.ginger.Localizable;
 
 public interface LocalisedMessages extends Localizable {
 
-	String invalidArgument(String argumentName, String reason);
+	String invalidArgument();
 	String noPermission();
 
 }

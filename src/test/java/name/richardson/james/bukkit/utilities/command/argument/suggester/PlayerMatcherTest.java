@@ -98,8 +98,10 @@ public abstract class PlayerMatcherTest extends TestCase {
 		assertTrue("toString has not been overridden", suggester.toString().contains("PlayerMatcher"));
 	}
 
+	@Override
 	@Before
 	public void setUp() {
 		setServer(mock(Server.class, RETURNS_SMART_NULLS));
 	}
+
 }

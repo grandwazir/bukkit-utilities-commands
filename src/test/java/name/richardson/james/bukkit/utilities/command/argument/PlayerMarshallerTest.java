@@ -64,6 +64,6 @@ public class PlayerMarshallerTest {
 	public void setup() {
 		argument = mock(Argument.class);
 		server = mock(Server.class);
-		marshaller = new PlayerMarshaller(argument, server);
+		marshaller = new SimplePlayerMarshaller(argument, server);
 	}
 }

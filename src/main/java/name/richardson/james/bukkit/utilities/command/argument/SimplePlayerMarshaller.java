@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014 James Richardson.
  *
- * RequiredPlayerMarshaller.java is part of BukkitUtilities.
+ * PlayerMarshaller.java is part of BukkitUtilities.
  *
  * bukkit-utilities is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -18,30 +18,38 @@
 
 package name.richardson.james.bukkit.utilities.command.argument;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
-public class RequiredPlayerMarshaller extends SimplePlayerMarshaller implements PlayerMarshaller {
+public class SimplePlayerMarshaller extends AbstractMarshaller implements PlayerMarshaller {
 
-	public RequiredPlayerMarshaller(final Argument argument, final Server server) {
-		super(argument, server);
-	}
+	private final Server server;
 
-	@Override
-	public Set<Player> getPlayers() {
-		Set<Player> players = super.getPlayers();
-		if (players.isEmpty())
-			throw new InvalidArgumentException(getError());
-		return players;
+	public SimplePlayerMarshaller(Argument argument, Server server) {
+		super(argument);
+		this.server = server;
 	}
 
 	@Override
 	public Player getPlayer() {
-		Player player = super.getPlayer();
-		if (player == null)
-			throw new InvalidArgumentException(getError());
+		Player player = null;
+		if (getString() != null) {
+			player = server.getPlayerExact(getString());
+		}
 		return player;
+	}
+
+	@Override
+	public Set<Player> getPlayers() {
+		Set<Player> players = new HashSet<Player>();
+		for (String playerName : getStrings()) {
+			Player player = server.getPlayerExact(playerName);
+			if (player != null)
+				players.add(player);
+		}
+		return players;
 	}
 }

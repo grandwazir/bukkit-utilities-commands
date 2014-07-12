@@ -25,6 +25,8 @@ import name.richardson.james.bukkit.utilities.command.argument.Argument;
 import name.richardson.james.bukkit.utilities.command.argument.ArgumentInvoker;
 import name.richardson.james.bukkit.utilities.command.argument.InvalidArgumentException;
 import name.richardson.james.bukkit.utilities.command.argument.SimpleArgumentInvoker;
+import name.richardson.james.bukkit.utilities.command.localisation.Localisation;
+import name.richardson.james.bukkit.utilities.command.localisation.LocalisedMessages;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.ChatColor;
@@ -34,6 +36,8 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
 public abstract class AbstractCommand implements Command {
+
+	private static final LocalisedMessages LOCALISED_MESSAGES = Localisation.getLocalisedMessages();
 
 	private final CommandPermissions annotation;
 	private final ArgumentInvoker argumentInvoker;
@@ -105,12 +109,12 @@ public abstract class AbstractCommand implements Command {
 				this.execute();
 			} catch (InvalidArgumentException e) {
 				CommandSender sender = getContext().getCommandSender();
-				// sender.sendMessage(INVOKER_INVALID_ARGUMENT.asErrorMessage());
+				sender.sendMessage(ChatColor.RED + LOCALISED_MESSAGES.invalidArgument());
 				sender.sendMessage(ChatColor.YELLOW + e.getError());
 			}
 		} else {
 			CommandSender sender = getContext().getCommandSender();
-			// sender.sendMessage(INVOKER_NO_PERMISSION.asErrorMessage());
+			sender.sendMessage(ChatColor.RED + LOCALISED_MESSAGES.noPermission());
 		}
 	}
 

@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014 James Richardson.
  *
- * RequiredPlayerMarshaller.java is part of BukkitUtilities.
+ * BooleanMarshaller.java is part of BukkitUtilities.
  *
  * bukkit-utilities is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -18,30 +18,14 @@
 
 package name.richardson.james.bukkit.utilities.command.argument;
 
-import java.util.Set;
+public class SimpleBooleanMarshaller extends AbstractMarshaller implements BooleanMarshaller {
 
-import org.bukkit.Server;
-import org.bukkit.entity.Player;
-
-public class RequiredPlayerMarshaller extends SimplePlayerMarshaller implements PlayerMarshaller {
-
-	public RequiredPlayerMarshaller(final Argument argument, final Server server) {
-		super(argument, server);
+	@SuppressWarnings("BooleanParameter")
+	public SimpleBooleanMarshaller(final Argument argument) {
+		super(argument);
 	}
 
-	@Override
-	public Set<Player> getPlayers() {
-		Set<Player> players = super.getPlayers();
-		if (players.isEmpty())
-			throw new InvalidArgumentException(getError());
-		return players;
-	}
-
-	@Override
-	public Player getPlayer() {
-		Player player = super.getPlayer();
-		if (player == null)
-			throw new InvalidArgumentException(getError());
-		return player;
+	public boolean isSet() {
+		return (getString() != null);
 	}
 }

@@ -30,6 +30,7 @@ import static org.mockito.Mockito.*;
 @RunWith(JUnit4.class)
 public class OnlinePlayerMatcherTest extends PlayerMatcherTest {
 
+	@Override
 	@Before
 	public void setUp() {
 		super.setUp();

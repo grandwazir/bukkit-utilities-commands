@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014 James Richardson.
  *
- * RequiredPlayerMarshaller.java is part of BukkitUtilities.
+ * IntegerMarshaller.java is part of BukkitUtilities.
  *
  * bukkit-utilities is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -18,30 +18,25 @@
 
 package name.richardson.james.bukkit.utilities.command.argument;
 
-import java.util.Set;
+public class SimpleIntegerMarshaller extends AbstractMarshaller implements IntegerMarshaller {
 
-import org.bukkit.Server;
-import org.bukkit.entity.Player;
+	private final int defaultValue;
 
-public class RequiredPlayerMarshaller extends SimplePlayerMarshaller implements PlayerMarshaller {
-
-	public RequiredPlayerMarshaller(final Argument argument, final Server server) {
-		super(argument, server);
+	public SimpleIntegerMarshaller(final Argument argument, int defaultValue) {
+		super(argument);
+		this.defaultValue = defaultValue;
 	}
 
 	@Override
-	public Set<Player> getPlayers() {
-		Set<Player> players = super.getPlayers();
-		if (players.isEmpty())
-			throw new InvalidArgumentException(getError());
-		return players;
-	}
-
-	@Override
-	public Player getPlayer() {
-		Player player = super.getPlayer();
-		if (player == null)
-			throw new InvalidArgumentException(getError());
-		return player;
+	public int getInteger() {
+		if (getString() == null) {
+			return defaultValue;
+		} else {
+			try {
+				return Integer.parseInt(getString());
+			} catch (NumberFormatException e) {
+				return defaultValue;
+			}
+		}
 	}
 }
