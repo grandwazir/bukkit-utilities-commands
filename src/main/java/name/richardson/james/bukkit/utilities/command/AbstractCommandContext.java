@@ -18,6 +18,8 @@
 
 package name.richardson.james.bukkit.utilities.command;
 
+import java.util.*;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.bukkit.command.CommandSender;
@@ -31,38 +33,58 @@ public class AbstractCommandContext implements CommandContext {
 
 	private final String arguments;
 	private final CommandSender commandSender;
+	private final Map<String, Boolean> permissions;
+	private List<String> messages;
 
-	/**
-	 * Constructs a new AbstractCommandContext with the argumentsList and CommandSender.
-	 *
-	 * @param arguments     provided argumentsList
-	 * @param commandSender the CommandSender executing the command
-	 */
-	protected AbstractCommandContext(String[] arguments, CommandSender commandSender) {
+	protected AbstractCommandContext(String[] arguments, CommandSender commandSender, Collection<String> permissions) {
 		Validate.notNull(arguments);
 		Validate.notNull(commandSender);
 		this.commandSender = commandSender;
 		this.arguments = StringUtils.join(arguments, " ");
+		this.permissions = new HashMap<>(permissions.size());
+		messages = new ArrayList<>();
+		for (String permission : permissions) {
+			boolean hasPermission = commandSender.hasPermission(permission);
+			this.permissions.put(permission, hasPermission);
+		}
 	}
 
 	@Override
-	public String getArguments() {
+	public final String getArguments() {
 		return arguments;
 	}
 
-	/**
-	 * Get the CommandSender who called this command.
-	 *
-	 * @return the CommandSender
-	 */
 	@Override
-	public CommandSender getCommandSender() {
+	public final CommandSender getCommandSender() {
 		return commandSender;
 	}
 
 	@Override
-	public boolean isConsoleCommandSender() {
-		return !(commandSender instanceof Player);
+	public final boolean isAuthorised(String permission) {
+		return permissions.get(permission);
+	}
+
+	@Override
+	public final boolean isAuthorised() {
+		return permissions.containsValue(true);
+	}
+
+	@Override
+	public final void addMessage(String message) {
+		messages.add(message);
+	}
+
+	@Override
+	public final void addMessages(Collection<String> messages) {
+		messages.addAll(messages);
+	}
+
+	@Override
+	public final int sendMessages() {
+		String[] messages = this.messages.toArray(new String[this.messages.size()]);
+		commandSender.sendMessage(messages);
+		this.messages.clear();
+		return messages.length;
 	}
 
 }

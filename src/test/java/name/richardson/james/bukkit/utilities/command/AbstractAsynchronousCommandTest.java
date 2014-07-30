@@ -1,25 +1,21 @@
 package name.richardson.james.bukkit.utilities.command;
 
 import java.util.Map;
-import java.util.concurrent.Future;
 
 import org.bukkit.permissions.Permissible;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Matchers;
-import sun.org.mozilla.javascript.internal.Callable;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
-public class AbstractAsyncronousCommandTest {
+public class AbstractAsynchronousCommandTest {
 
-	private AbstractAsyncronousCommand command;
+	private AbstractAsynchronousCommand command;
 	private Plugin plugin;
 	private BukkitScheduler scheduler;
 
@@ -34,7 +30,7 @@ public class AbstractAsyncronousCommandTest {
 	public void whenSchedulingAddContextToQueue() {
 		CommandContext context = mock(CommandContext.class);
 		command.schedule(context);
-		assertSame("Command context should be the same!", context, command.getContext());
+		assertSame("Command context should be the same!", context, command.getNextScheduledContext());
 	}
 
 	@Test
@@ -47,7 +43,7 @@ public class AbstractAsyncronousCommandTest {
 	@Test
 	public void shouldCheckAllPermissionsAgainstPermissible() throws Exception {
 		Permissible permissible = mock(Permissible.class);
-		AbstractAsyncronousCommand.PermissionTask task = new AbstractAsyncronousCommand.PermissionTask(permissible, "a", "b");
+		AbstractAsynchronousCommand.PermissionTask task = new AbstractAsynchronousCommand.PermissionTask(permissible, "a", "b");
 		task.call();
 		verify(permissible).hasPermission("a");
 		verify(permissible).hasPermission("b");
@@ -58,7 +54,7 @@ public class AbstractAsyncronousCommandTest {
 		Permissible permissible = mock(Permissible.class);
 		when(permissible.hasPermission("a")).thenReturn(true);
 		when(permissible.hasPermission("b")).thenReturn(false);
-		AbstractAsyncronousCommand.PermissionTask task = new AbstractAsyncronousCommand.PermissionTask(permissible, "a", "b");
+		AbstractAsynchronousCommand.PermissionTask task = new AbstractAsynchronousCommand.PermissionTask(permissible, "a", "b");
 		Map<String, Boolean> map = task.call();
 		assertTrue("Permission should be true!", map.get("a"));
 		assertFalse("Permission should be false", map.get("b"));
@@ -66,7 +62,7 @@ public class AbstractAsyncronousCommandTest {
 
 
 	@CommandPermissions(permissions = {"a","b"})
-	private class TestCommand extends AbstractAsyncronousCommand {
+	private class TestCommand extends AbstractAsynchronousCommand {
 
 		protected TestCommand(Plugin plugin, BukkitScheduler scheduler) {
 			super(plugin, scheduler);

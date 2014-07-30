@@ -58,11 +58,11 @@ public class FallthroughCommandInvoker extends AbstractCommandInvoker {
 		if (selectedCommand != null) {
 			CommandContext context = new NestedCommandContext(args, sender);
 			String arguments = context.getArguments();
-			suggestions.addAll(selectedCommand.suggestArguments(arguments));
+			suggestions.addAll(selectedCommand.getSuggestions(arguments));
 		} else {
 			CommandContext context = new PassthroughCommandContext(args, sender);
 			String arguments = context.getArguments();
-			suggestions.addAll(fallthroughCommand.suggestArguments(arguments));
+			suggestions.addAll(fallthroughCommand.getSuggestions(arguments));
 		}
 		return suggestions;
 	}

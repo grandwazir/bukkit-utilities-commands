@@ -18,7 +18,9 @@
 
 package name.richardson.james.bukkit.utilities.command;
 
+import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 
 import name.richardson.james.bukkit.utilities.command.argument.ArgumentInvoker;
 
@@ -28,56 +30,14 @@ import org.bukkit.permissions.Permissible;
  * Executes actions on behalf of a user, notifies the user of the outcome. Used anywhere where a user is required instructions to a plugin interactively.
  * Commands also provide a method for users to check to see if they are authorised to use the command in the first place.
  */
-public interface Command extends Runnable, ArgumentInvoker {
+public interface Command extends Runnable {
 
-	String getArgumentUsage();
-	/**
-	 * Returns a brief description of what this command does.
-	 *
-	 * @return the localised description of the command
-	 */
 	public String getDescription();
-
-	/**
-	 * Return the short name of this command.
-	 *
-	 * @return the localised name of the command
-	 */
+	public Collection<String> getExtendedUsage();
 	public String getName();
-
-	/**
-	 * Returns a map containing details of all the permissions the player has.
-	 * The key is the name of the permission and the value is if the player has that
-	 * permission or not.
-	 *
-	 * @param permissible
-	 * @return the permissions the player has.
-	 */
-	public Map<String, Boolean> getPermissionMap(Permissible permissible);
-
-	/**
-	 * Returns the arguments that can be passed to this command.
-	 *
-	 * @return the localised usage message
-	 */
-	@Override
+	public Set<String> getSuggestions(String arguments);
 	public String getUsage();
-
-	/**
-	 * Returns {@code true} if the user is authorised to use this command. <p/> Authorisation does not guarantee that the user may use all the features associated
-	 * with a command.
-	 *
-	 * @param permissible the permissible requesting authorisation
-	 * @return {@code true} if the user is authorised; {@code false} otherwise
-	 * @since 6.0.0
-	 */
 	public boolean isAuthorised(Permissible permissible);
-
-	/**
-	 * Schedule this command for execution using the provided CommandContext.
-	 *
-	 * This allows for implementations to override this method to allow for Asyncronous or Syncronous execution.
-	 * @param context
-	 */
 	public void schedule(CommandContext context);
+
 }

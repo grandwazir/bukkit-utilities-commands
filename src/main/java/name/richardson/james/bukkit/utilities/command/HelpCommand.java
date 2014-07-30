@@ -21,6 +21,7 @@ package name.richardson.james.bukkit.utilities.command;
 import java.util.*;
 
 import name.richardson.james.bukkit.utilities.command.argument.Argument;
+import name.richardson.james.bukkit.utilities.command.argument.ArgumentMetadata;
 import name.richardson.james.bukkit.utilities.command.argument.PositionalArgument;
 import name.richardson.james.bukkit.utilities.command.argument.SimpleArgumentMetadata;
 import name.richardson.james.bukkit.utilities.command.argument.suggester.StringSuggester;
@@ -37,21 +38,21 @@ import org.bukkit.scheduler.BukkitScheduler;
 public class HelpCommand extends AbstractSynchronousCommand {
 
 	private static final Messages MESSAGES = MessagesFactory.getColouredMessages();
-	private final PositionalArgument commandName;
-
-	private final Map<String, Command> commands = new TreeMap<String, Command>();
+	private final Argument commandName;
+	private final Map<String, Command> commands;
 	private final String prefix;
 	private final PluginDescriptionFile description;
 
-	public HelpCommand(Plugin plugin, BukkitScheduler scheduler, PluginDescriptionFile description, String prefix, Iterable<Command> commands) {
+	public HelpCommand(Plugin plugin, BukkitScheduler scheduler, Iterable<Command> commands, PluginDescriptionFile description, String prefix) {
 		super(plugin, scheduler);
 		this.description = description;
 		this.prefix = "/" + prefix;
+		this.commands = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 		for (Command command : commands) {
 			this.commands.put(command.getName(), command);
 		}
-		SimpleArgumentMetadata metadata = new SimpleArgumentMetadata(MESSAGES.helpCommandArgumentId(), MESSAGES.helpCommandArgumentName(), MESSAGES.helpCommandArgumentDesc());
-		StringSuggester suggester = new StringSuggester(this.commands.keySet());
+		ArgumentMetadata metadata = new SimpleArgumentMetadata(MESSAGES.helpCommandArgumentId(), MESSAGES.helpCommandArgumentName(), MESSAGES.helpCommandArgumentDesc());
+		Suggester suggester = new StringSuggester(this.commands.keySet());
 		Argument unused = new PositionalArgument(metadata, suggester, 0);
 		commandName = new PositionalArgument(metadata, suggester, 1);
 		addArgument(unused);
@@ -67,65 +68,42 @@ public class HelpCommand extends AbstractSynchronousCommand {
 	}
 
 	@Override
-	public boolean isAuthorised(Permissible permissible) {
-		return true;
-	}
-
-	@Override
-	public String getArgumentUsage() {
-		return commandName.getUsage();
-	}
-
-	@Override
-	protected void execute() {
-		Command selectedCommand = (commandName.getString() == null) ? null : commands.get(commandName.getString());
-		CommandSender sender = getCurrentContext().getCommandSender();
-		if (commandName.getString() != null && commandName.getString().equalsIgnoreCase("help")) {
+	protected final void execute() {
+		String commandName = this.commandName.getString();
+		Command selectedCommand = (commandName == null) ? null : commands.get(commandName);
+		if (commandName != null && commandName.equalsIgnoreCase("help")) {
 			selectedCommand = this;
 		}
 		if (selectedCommand == null) {
-			sender.sendMessage(MESSAGES.pluginName(description.getName(), description.getVersion()));
-			sender.sendMessage(MESSAGES.pluginDescription(description.getDescription()));
-			sender.sendMessage(MESSAGES.helpCommandUsage(prefix, this.getName(), commandName.getUsage()));
+			addMessage(MESSAGES.pluginName(description.getName(), description.getVersion()));
+			addMessage(MESSAGES.pluginDescription(description.getDescription()));
+			addMessage(MESSAGES.helpCommandUsage(prefix, getName(), this.commandName.getUsage()));
 			for (Command command : commands.values()) {
-				if (!command.isAuthorised(sender)) continue;
-				sender.sendMessage(MESSAGES.helpCommandListItem(prefix, command.getName(), command.getArgumentUsage()));
+				CommandSender commandSender = getContext().getCommandSender();
+				if (!command.isAuthorised(commandSender)) continue;
+				addMessage(MESSAGES.helpCommandListItem(prefix, command.getName(), command.getUsage()));
 			}
 		} else {
-			sender.sendMessage(MESSAGES.helpCommandExtendedDescription(selectedCommand.getDescription()));
-			sender.sendMessage(MESSAGES.helpCommandListItem(prefix, selectedCommand.getName(), selectedCommand.getArgumentUsage()));
+			addMessage(MESSAGES.helpCommandExtendedDescription(selectedCommand.getDescription()));
+			addMessage(MESSAGES.helpCommandListItem(prefix, selectedCommand.getName(), selectedCommand.getUsage()));
 			for (String message : selectedCommand.getExtendedUsage()) {
-				sender.sendMessage(message);
+				addMessage(message);
 			}
 		}
 	}
 
 	@Override
-	/** Needed to remove the dummy argument from the usage table */
-	public Collection<String> getExtendedUsage() {
-		Collection<String> usage = super.getExtendedUsage();
-		ArrayList<String> list = new ArrayList<String>(usage);
-		list.remove(0);
-		return list;
+	protected final Set<String> getPermissions() {
+		return Collections.emptySet();
 	}
 
-	/**
-	 * Return the short name of this command.
-	 *
-	 * @return the localised name of the command
-	 */
 	@Override
-	public String getName() {
+	public final String getName() {
 		return MESSAGES.helpCommandName();
 	}
 
-	/**
-	 * Returns a brief description of what this command does.
-	 *
-	 * @return the localised description of the command
-	 */
 	@Override
-	public String getDescription() {
+	public final String getDescription() {
 		return MESSAGES.helpCommandDescription();
 	}
 

@@ -18,6 +18,8 @@
 
 package name.richardson.james.bukkit.utilities.command;
 
+import java.util.Collection;
+
 import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.command.CommandSender;
 
@@ -33,7 +35,7 @@ public class NestedCommandContext extends AbstractCommandContext {
 	 * @param arguments provided arguments
 	 * @param sender    the CommandSender executing the command
 	 */
-	protected NestedCommandContext(String[] arguments, CommandSender sender) {
-		super((String[]) ArrayUtils.remove(arguments, 0), sender);
+	protected NestedCommandContext(String[] arguments, CommandSender sender, Collection<String> permissions) {
+		super((String[]) ArrayUtils.remove(arguments, 0), sender, permissions);
 	}
 }

@@ -18,7 +18,6 @@
 
 package name.richardson.james.bukkit.utilities.command;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
@@ -29,7 +28,6 @@ import name.richardson.james.bukkit.utilities.command.argument.SimpleArgumentInv
 import name.richardson.james.bukkit.utilities.command.localisation.Messages;
 import name.richardson.james.bukkit.utilities.command.localisation.MessagesFactory;
 
-import org.apache.commons.lang.Validate;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permissible;
 import org.bukkit.plugin.Plugin;
@@ -38,9 +36,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 public abstract class AbstractCommand implements Command {
 
 	private static final Messages MESSAGES = MessagesFactory.getColouredMessages();
-	private final CommandPermissions annotation;
 	private final ArgumentInvoker argumentInvoker;
-	private final Collection<String> messages;
 	private final Plugin plugin;
 	private final BukkitScheduler scheduler;
 	private CommandContext context;
@@ -49,117 +45,98 @@ public abstract class AbstractCommand implements Command {
 		this.plugin = plugin;
 		this.scheduler = scheduler;
 		argumentInvoker = new SimpleArgumentInvoker();
-		annotation = this.getClass().getAnnotation(CommandPermissions.class);
-		messages = new ArrayList<>();
 	}
 
 	@Override
-	public void addArgument(Argument argument) {
-		argumentInvoker.addArgument(argument);
-	}
-
-	@Override
-	public String getArgumentUsage() {
-		return argumentInvoker.getUsage();
-	}
-
-	@Override
-	public Collection<String> getExtendedUsage() {
+	public final Collection<String> getExtendedUsage() {
 		return argumentInvoker.getExtendedUsage();
 	}
 
 	@Override
-	public String getUsage() {
-		String arguments = getArgumentUsage();
-		return getName() + " " + arguments;
-	}
-
-	/**
-	 * Returns {@code true} if the user is authorised to use this command. <p/> Authorisation does not guarantee that the user may use all the features associated
-	 * with a command.
-	 *
-	 * @param permissible the permissible requesting authorisation
-	 * @return {@code true} if the user is authorised; {@code false} otherwise
-	 * @since 6.0.0
-	 */
-	@Override
-	public boolean isAuthorised(Permissible permissible) {
-		boolean result = false;
-		if (getAnnotation() != null) {
-			for (String permission : getAnnotation().permissions()) {
-				if (permissible.hasPermission(permission)) {
-					result = true;
-				}
-			}
-		} else {
-			result = true;
-		}
-		return result;
-	}
-
-	@Override
-	public void parseArguments(String arguments) throws InvalidArgumentException {
-		argumentInvoker.parseArguments(arguments);
-	}
-
-	@Override
-	public void removeArgument(Argument argument) {
-		argumentInvoker.removeArgument(argument);
-	}
-
-	@Override
-	public synchronized void run() {
-		CommandContext context = getContext();
-		Validate.notNull(context);
-		setCurrentContext(context);
-		CommandSender sender = context.getCommandSender();
-		if (isAuthorised(sender)) {
-			try {
-				this.parseArguments(context.getArguments());
-				this.execute();
-				sender.sendMessage(getMessages());
-			} catch (InvalidArgumentException e) {
-				sender.sendMessage(MESSAGES.invalidArgument());
-			}
-		} else {
-			sender.sendMessage(MESSAGES.noPermission());
-		}
-	}
-
-	@Override
-	public Set<String> suggestArguments(String arguments) {
+	public final Set<String> getSuggestions(String arguments) {
 		return argumentInvoker.suggestArguments(arguments);
 	}
 
-	protected void addMessage(String message) {
-		messages.add(message);
+	@Override
+	public final String getUsage() {
+		return argumentInvoker.getUsage();
+	}
+
+	@Override
+	public final boolean isAuthorised(Permissible permissible) {
+		if (getPermissions().isEmpty()) {
+			return true;
+		} else {
+			for (String permission : getPermissions()) {
+				if (permissible.hasPermission(permission)) return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public final synchronized void run() {
+		getNextScheduledContext();
+		if (getContext().isAuthorised()) {
+			try {
+				parseArguments(getContext().getArguments());
+				execute();
+			} catch (InvalidArgumentException e) {
+				addMessage(MESSAGES.invalidArgument());
+			}
+		} else {
+			addMessage(MESSAGES.noPermission());
+		}
+		sendMessages();
+	}
+
+	protected final void addArgument(Argument argument) {
+		argumentInvoker.addArgument(argument);
+	}
+
+	protected final void addMessage(String message) {
+		context.addMessage(message);
+	}
+
+	protected final void addMessages(Collection<String> messages) {
+		context.addMessages(messages);
 	}
 
 	protected abstract void execute();
 
-	protected CommandPermissions getAnnotation() {
-		return annotation;
-	}
-
-	protected abstract CommandContext getContext();
-
-	protected CommandContext getCurrentContext() {
+	protected final CommandContext getContext() {
 		return context;
 	}
 
-	protected String[] getMessages() {
-		return messages.toArray(new String[messages.size()]);
-	}
+	protected abstract CommandContext getNextScheduledContext();
 
-	protected Plugin getPlugin() {
+	protected abstract Set<String> getPermissions();
+
+	protected final Plugin getPlugin() {
 		return plugin;
 	}
 
-	protected BukkitScheduler getScheduler() {
+	protected final BukkitScheduler getScheduler() {
 		return scheduler;
 	}
 
-	protected void setCurrentContext(CommandContext context) {
+	protected final boolean isAuthorised() {
+		return context.isAuthorised();
+	}
+
+	protected final boolean isAuthorised(String permission) {
+		return context.isAuthorised(permission);
+	}
+
+	protected final void parseArguments(String arguments) throws InvalidArgumentException {
+		argumentInvoker.parseArguments(arguments);
+	}
+
+	protected final int sendMessages() {
+		return context.sendMessages();
+	}
+
+	protected final void setContext(CommandContext context) {
 		this.context = context;
 	}
 

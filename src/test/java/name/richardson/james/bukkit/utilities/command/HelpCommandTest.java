@@ -44,7 +44,7 @@ public class HelpCommandTest {
 		commands.add(nestedCommand);
 		sender = mock(CommandSender.class);
 		PluginDescriptionFile descriptionFile = new PluginDescriptionFile("TestPlugin", "1.0.0", null);
-		command = new HelpCommand(plugin, scheduler, descriptionFile, "test", commands);
+		command = new HelpCommand(plugin, scheduler, commands, descriptionFile, "test");
 	}
 
 	@Test

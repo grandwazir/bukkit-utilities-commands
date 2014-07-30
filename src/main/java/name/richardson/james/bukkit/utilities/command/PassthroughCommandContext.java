@@ -18,6 +18,8 @@
 
 package name.richardson.james.bukkit.utilities.command;
 
+import java.util.Collection;
+
 import org.bukkit.command.CommandSender;
 
 /**
@@ -31,7 +33,7 @@ public class PassthroughCommandContext extends AbstractCommandContext {
 	 * @param arguments provided arguments
 	 * @param sender    the CommandSender executing the command
 	 */
-	protected PassthroughCommandContext(String[] arguments, CommandSender sender) {
-		super(arguments, sender);
+	protected PassthroughCommandContext(String[] arguments, CommandSender sender, Collection<String> permissions) {
+		super(arguments, sender, permissions);
 	}
 }

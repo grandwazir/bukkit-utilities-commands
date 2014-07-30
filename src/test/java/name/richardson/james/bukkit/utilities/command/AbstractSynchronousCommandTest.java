@@ -2,10 +2,6 @@ package name.richardson.james.bukkit.utilities.command;
 
 import java.util.Map;
 
-import name.richardson.james.bukkit.utilities.command.argument.Argument;
-
-import org.bukkit.Server;
-import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permissible;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -13,7 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
 public class AbstractSynchronousCommandTest {
@@ -51,7 +46,7 @@ public class AbstractSynchronousCommandTest {
 	public void whenSchedulingAddContextToQueue() {
 		CommandContext context = mock(CommandContext.class);
 		command.schedule(context);
-		assertSame("Command context should be the same!", context, command.getContext());
+		assertSame("Command context should be the same!", context, command.getNextScheduledContext());
 	}
 
 	@Test

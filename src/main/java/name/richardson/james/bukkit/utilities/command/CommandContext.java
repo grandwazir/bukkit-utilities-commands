@@ -17,7 +17,11 @@
  ******************************************************************************/
 package name.richardson.james.bukkit.utilities.command;
 
+import java.util.Collection;
+import java.util.Map;
+
 import org.bukkit.command.CommandSender;
+import org.bukkit.permissions.Permissible;
 
 /**
  * A object that represents the context that a {@link name.richardson.james.bukkit.utilities.command.Command} has been executed within. This object is
@@ -26,13 +30,11 @@ import org.bukkit.command.CommandSender;
  */
 public interface CommandContext {
 
+	void addMessage(String message);
+	void addMessages(Collection<String> messages);
 	String getArguments();
-
-	/**
-	 * Get the CommandSender who called this command.
-	 *
-	 * @return the CommandSender
-	 */
 	CommandSender getCommandSender();
-	boolean isConsoleCommandSender();
+ 	boolean isAuthorised(String permission);
+	boolean isAuthorised();
+	int sendMessages();
 }
