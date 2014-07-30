@@ -2,10 +2,7 @@ package name.richardson.james.bukkit.utilities.command;
 
 import java.util.*;
 
-import name.richardson.james.bukkit.utilities.command.argument.Argument;
-import name.richardson.james.bukkit.utilities.command.argument.ArgumentMetadata;
-import name.richardson.james.bukkit.utilities.command.argument.PositionalArgument;
-import name.richardson.james.bukkit.utilities.command.argument.SimpleArgumentMetadata;
+import name.richardson.james.bukkit.utilities.command.argument.*;
 import name.richardson.james.bukkit.utilities.command.argument.suggester.StringSuggester;
 import name.richardson.james.bukkit.utilities.command.argument.suggester.Suggester;
 import name.richardson.james.bukkit.utilities.command.localisation.Messages;
@@ -74,7 +71,7 @@ public class RootCommandInvoker implements CommandInvoker {
 			super(plugin, scheduler);
 			ArgumentMetadata metadata = new SimpleArgumentMetadata(MESSAGES.helpCommandArgumentId(), MESSAGES.helpCommandArgumentName(), MESSAGES.helpCommandArgumentDesc());
 			Suggester suggester = new StringSuggester(commands.keySet());
-			Argument unused = new PositionalArgument(metadata, suggester, 0);
+			Argument unused = new DummyArgument();
 			commandName = new PositionalArgument(metadata, suggester, 1);
 			addArgument(unused);
 			addArgument(commandName);
