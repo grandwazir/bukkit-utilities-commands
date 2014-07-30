@@ -22,10 +22,7 @@ import java.util.*;
 
 import name.richardson.james.bukkit.utilities.command.argument.suggester.StringSuggester;
 import name.richardson.james.bukkit.utilities.command.argument.suggester.Suggester;
-import name.richardson.james.bukkit.utilities.command.localisation.LocalisedMessages;
 
-import com.vityuk.ginger.LocalizationBuilder;
-import com.vityuk.ginger.loader.LocalizationLoader;
 import org.apache.commons.lang.Validate;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -79,14 +76,6 @@ public abstract class AbstractCommandInvoker implements CommandInvoker {
 		} else {
 			return null;
 		}
-	}
-
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder("AbstractCommandInvoker{");
-		sb.append("commandMap=").append(commandMap);
-		sb.append('}');
-		return sb.toString();
 	}
 
 	protected Plugin getPlugin() {

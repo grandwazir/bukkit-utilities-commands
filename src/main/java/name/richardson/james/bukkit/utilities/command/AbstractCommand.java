@@ -18,6 +18,7 @@
 
 package name.richardson.james.bukkit.utilities.command;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Set;
 
@@ -25,11 +26,10 @@ import name.richardson.james.bukkit.utilities.command.argument.Argument;
 import name.richardson.james.bukkit.utilities.command.argument.ArgumentInvoker;
 import name.richardson.james.bukkit.utilities.command.argument.InvalidArgumentException;
 import name.richardson.james.bukkit.utilities.command.argument.SimpleArgumentInvoker;
-import name.richardson.james.bukkit.utilities.command.localisation.Localisation;
-import name.richardson.james.bukkit.utilities.command.localisation.LocalisedMessages;
+import name.richardson.james.bukkit.utilities.command.localisation.Messages;
+import name.richardson.james.bukkit.utilities.command.localisation.MessagesFactory;
 
 import org.apache.commons.lang.Validate;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permissible;
 import org.bukkit.plugin.Plugin;
@@ -37,23 +37,30 @@ import org.bukkit.scheduler.BukkitScheduler;
 
 public abstract class AbstractCommand implements Command {
 
-	private static final LocalisedMessages LOCALISED_MESSAGES = Localisation.getLocalisedMessages();
-
+	private static final Messages MESSAGES = MessagesFactory.getColouredMessages();
 	private final CommandPermissions annotation;
 	private final ArgumentInvoker argumentInvoker;
+	private final Collection<String> messages;
 	private final Plugin plugin;
 	private final BukkitScheduler scheduler;
+	private CommandContext context;
 
 	public AbstractCommand(Plugin plugin, BukkitScheduler scheduler) {
 		this.plugin = plugin;
 		this.scheduler = scheduler;
 		argumentInvoker = new SimpleArgumentInvoker();
 		annotation = this.getClass().getAnnotation(CommandPermissions.class);
+		messages = new ArrayList<>();
 	}
 
 	@Override
 	public void addArgument(Argument argument) {
 		argumentInvoker.addArgument(argument);
+	}
+
+	@Override
+	public String getArgumentUsage() {
+		return argumentInvoker.getUsage();
 	}
 
 	@Override
@@ -63,8 +70,8 @@ public abstract class AbstractCommand implements Command {
 
 	@Override
 	public String getUsage() {
-		String arguments = getColouredArgumentUsage();
-		return ChatColor.YELLOW + getName() + " " + arguments;
+		String arguments = getArgumentUsage();
+		return getName() + " " + arguments;
 	}
 
 	/**
@@ -102,25 +109,30 @@ public abstract class AbstractCommand implements Command {
 
 	@Override
 	public synchronized void run() {
-		Validate.notNull(getContext());
-		if (isAuthorised(getContext().getCommandSender())) {
+		CommandContext context = getContext();
+		Validate.notNull(context);
+		setCurrentContext(context);
+		CommandSender sender = context.getCommandSender();
+		if (isAuthorised(sender)) {
 			try {
-				this.parseArguments(getContext().getArguments());
+				this.parseArguments(context.getArguments());
 				this.execute();
+				sender.sendMessage(getMessages());
 			} catch (InvalidArgumentException e) {
-				CommandSender sender = getContext().getCommandSender();
-				sender.sendMessage(ChatColor.RED + LOCALISED_MESSAGES.invalidArgument());
-				sender.sendMessage(ChatColor.YELLOW + e.getError());
+				sender.sendMessage(MESSAGES.invalidArgument());
 			}
 		} else {
-			CommandSender sender = getContext().getCommandSender();
-			sender.sendMessage(ChatColor.RED + LOCALISED_MESSAGES.noPermission());
+			sender.sendMessage(MESSAGES.noPermission());
 		}
 	}
 
 	@Override
 	public Set<String> suggestArguments(String arguments) {
 		return argumentInvoker.suggestArguments(arguments);
+	}
+
+	protected void addMessage(String message) {
+		messages.add(message);
 	}
 
 	protected abstract void execute();
@@ -131,6 +143,14 @@ public abstract class AbstractCommand implements Command {
 
 	protected abstract CommandContext getContext();
 
+	protected CommandContext getCurrentContext() {
+		return context;
+	}
+
+	protected String[] getMessages() {
+		return messages.toArray(new String[messages.size()]);
+	}
+
 	protected Plugin getPlugin() {
 		return plugin;
 	}
@@ -139,10 +159,8 @@ public abstract class AbstractCommand implements Command {
 		return scheduler;
 	}
 
-	private String getColouredArgumentUsage() {
-		String usage = argumentInvoker.getUsage();
-		usage = usage.replaceAll("\\<", ChatColor.YELLOW + "\\<");
-		usage = usage.replaceAll("\\[", ChatColor.GREEN + "\\[");
-		return usage;
+	protected void setCurrentContext(CommandContext context) {
+		this.context = context;
 	}
+
 }

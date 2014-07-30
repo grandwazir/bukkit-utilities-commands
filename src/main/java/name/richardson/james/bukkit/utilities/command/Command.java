@@ -30,6 +30,7 @@ import org.bukkit.permissions.Permissible;
  */
 public interface Command extends Runnable, ArgumentInvoker {
 
+	String getArgumentUsage();
 	/**
 	 * Returns a brief description of what this command does.
 	 *

@@ -65,12 +65,4 @@ public class AbstractCommandContext implements CommandContext {
 		return !(commandSender instanceof Player);
 	}
 
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder("AbstractCommandContext{");
-		sb.append("arguments='").append(arguments).append('\'');
-		sb.append(", commandSender=").append(commandSender);
-		sb.append('}');
-		return sb.toString();
-	}
 }

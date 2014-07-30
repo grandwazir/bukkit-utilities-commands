@@ -29,13 +29,13 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>[1.6.4,)</version>
+            <version>1.6.4-R2.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.vityuk</groupId>
-            <artifactId>ginger-core</artifactId>
-            <version>0.2.1</version>
+            <groupId>name.richardson.james.bukkit</groupId>
+            <artifactId>bukkit-utilities-localisation</artifactId>
+            <version>1.0.0</version>
         </dependency>
     </dependencies>
 

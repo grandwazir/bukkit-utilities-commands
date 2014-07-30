@@ -66,8 +66,9 @@ public class SimpleArgumentInvoker implements ArgumentInvoker {
 			builder.append(ChatColor.YELLOW);
 			builder.append("- ");
 			builder.append(argument.getName());
+			builder.append(" ");
 			builder.append(ChatColor.GREEN);
-			builder.append(" (");
+			builder.append("(");
 			builder.append(argument.getDescription());
 			builder.append(")");
 			messages.add(builder.toString());

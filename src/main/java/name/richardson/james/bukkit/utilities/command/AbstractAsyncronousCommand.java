@@ -46,13 +46,13 @@ public abstract class AbstractAsyncronousCommand extends AbstractCommand {
 		return contexts.remove();
 	}
 
-	private static class PermissionTask implements Callable<Map<String, Boolean>> {
+	protected static class PermissionTask implements Callable<Map<String, Boolean>> {
 
 		private final Permissible permissible;
 		private final String[] permissions;
 		private boolean done = false;
 
-		private PermissionTask(Permissible permissible, String ... permissions) {
+		protected PermissionTask(Permissible permissible, String ... permissions) {
 			this.permissible = permissible;
 			this.permissions = permissions;
 		}
@@ -68,4 +68,5 @@ public abstract class AbstractAsyncronousCommand extends AbstractCommand {
 			return map;
 		}
 	}
+
 }

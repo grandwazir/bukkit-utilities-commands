@@ -18,69 +18,44 @@
 
 package name.richardson.james.bukkit.utilities.command;
 
+import java.util.*;
+
+import name.richardson.james.bukkit.utilities.command.argument.Argument;
+import name.richardson.james.bukkit.utilities.command.argument.PositionalArgument;
+import name.richardson.james.bukkit.utilities.command.argument.SimpleArgumentMetadata;
+import name.richardson.james.bukkit.utilities.command.argument.suggester.StringSuggester;
+import name.richardson.james.bukkit.utilities.command.argument.suggester.Suggester;
+import name.richardson.james.bukkit.utilities.command.localisation.Messages;
+import name.richardson.james.bukkit.utilities.command.localisation.MessagesFactory;
+
+import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permissible;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.scheduler.BukkitScheduler;
 
 public class HelpCommand extends AbstractSynchronousCommand {
 
-	public HelpCommand(Plugin plugin, BukkitScheduler scheduler) {
-		super(plugin, scheduler);
-	}
+	private static final Messages MESSAGES = MessagesFactory.getColouredMessages();
+	private final PositionalArgument commandName;
 
-	/**
-	 * Returns {@code true} if the user is authorised to use this command. <p/> Authorisation does not guarantee that the user may use all the features associated
-	 * with a command.
-	 *
-	 * @param permissible the permissible requesting authorisation
-	 * @return {@code true} if the user is authorised; {@code false} otherwise
-	 * @since 6.0.0
-	 */
-	@Override
-	public boolean isAuthorised(Permissible permissible) {
-		return false;
-	}
-
-	/**
-	 * Return the short name of this command.
-	 *
-	 * @return the localised name of the command
-	 */
-	@Override
-	public String getName() {
-		return null;
-	}
-
-	/**
-	 * Returns a brief description of what this command does.
-	 *
-	 * @return the localised description of the command
-	 */
-	@Override
-	public String getDescription() {
-		return null;
-	}
-
-	@Override
-	protected void execute() {
-
-	}
-
-	/*private final Argument argument;
-	private final Argument command;
 	private final Map<String, Command> commands = new TreeMap<String, Command>();
-	private final String usagePrefix;
+	private final String prefix;
+	private final PluginDescriptionFile description;
 
-	public HelpCommand(Iterable<Command> commands, String usagePrefix) {
-		super(HELPCOMMAND_NAME, HELPCOMMAND_DESC);
-		this.usagePrefix = ChatColor.RED + "/" + usagePrefix;
-		ArgumentMetadata metadata = new SimpleArgumentMetadata(HELPCOMMAND_ARGUMENT_ID, HELPCOMMAND_ARGUMENT_NAME, HELPCOMMAND_ARGUMENT_DESC);
-		Suggester suggester = createSuggester(commands);
-		command = new PositionalArgument(metadata, suggester, 0);
-		argument = new PositionalArgument(metadata, suggester, 1);
-		addArgument(command);
-		addArgument(argument);
-		addCommands(commands);
+	public HelpCommand(Plugin plugin, BukkitScheduler scheduler, PluginDescriptionFile description, String prefix, Iterable<Command> commands) {
+		super(plugin, scheduler);
+		this.description = description;
+		this.prefix = "/" + prefix;
+		for (Command command : commands) {
+			this.commands.put(command.getName(), command);
+		}
+		SimpleArgumentMetadata metadata = new SimpleArgumentMetadata(MESSAGES.helpCommandArgumentId(), MESSAGES.helpCommandArgumentName(), MESSAGES.helpCommandArgumentDesc());
+		StringSuggester suggester = new StringSuggester(this.commands.keySet());
+		Argument unused = new PositionalArgument(metadata, suggester, 0);
+		commandName = new PositionalArgument(metadata, suggester, 1);
+		addArgument(unused);
+		addArgument(commandName);
 	}
 
 	private static Suggester createSuggester(Iterable<Command> commands) {
@@ -92,39 +67,66 @@ public class HelpCommand extends AbstractSynchronousCommand {
 	}
 
 	@Override
-	public boolean isAuthorised(final Permissible permissible) {
+	public boolean isAuthorised(Permissible permissible) {
 		return true;
 	}
 
 	@Override
-	public boolean isAsynchronousCommand() {
-		return true;
+	public String getArgumentUsage() {
+		return commandName.getUsage();
 	}
 
 	@Override
 	protected void execute() {
-		List<String> messages = new ArrayList<String>();
-		Command selectedCommand = (argument.getString() == null) ? null : commands.get(argument.getString());
-		CommandSender sender = getContext().getCommandSender();
+		Command selectedCommand = (commandName.getString() == null) ? null : commands.get(commandName.getString());
+		CommandSender sender = getCurrentContext().getCommandSender();
+		if (commandName.getString() != null && commandName.getString().equalsIgnoreCase("help")) {
+			selectedCommand = this;
+		}
 		if (selectedCommand == null) {
-			messages.add(HELPCOMMAND_HEADER.asHeaderMessage(PLUGIN_NAME, PLUGIN_VERSION));
-			messages.add(PLUGIN_DESCRIPTION.asHeaderMessage());
-			messages.add(HELPCOMMAND_HINT.asWarningMessage(usagePrefix));
+			sender.sendMessage(MESSAGES.pluginName(description.getName(), description.getVersion()));
+			sender.sendMessage(MESSAGES.pluginDescription(description.getDescription()));
+			sender.sendMessage(MESSAGES.helpCommandUsage(prefix, this.getName(), commandName.getUsage()));
 			for (Command command : commands.values()) {
 				if (!command.isAuthorised(sender)) continue;
-				messages.add(usagePrefix + " " + command.getUsage());
+				sender.sendMessage(MESSAGES.helpCommandListItem(prefix, command.getName(), command.getArgumentUsage()));
 			}
 		} else {
-			messages.add(ChatColor.AQUA + selectedCommand.getDescription());
-			messages.add(HELPCOMMAND_USAGE.asInfoMessage(usagePrefix, selectedCommand.getUsage()));
-			messages.addAll(selectedCommand.getExtendedUsage());
+			sender.sendMessage(MESSAGES.helpCommandExtendedDescription(selectedCommand.getDescription()));
+			sender.sendMessage(MESSAGES.helpCommandListItem(prefix, selectedCommand.getName(), selectedCommand.getArgumentUsage()));
+			for (String message : selectedCommand.getExtendedUsage()) {
+				sender.sendMessage(message);
+			}
 		}
-		sender.sendMessage(messages.toArray(new String[messages.size()]));
 	}
 
-	private void addCommands(Iterable<Command> commands) {
-		for (Command command : commands) {
-			this.commands.put(command.getName(), command);
-		}
-	}*/
+	@Override
+	/** Needed to remove the dummy argument from the usage table */
+	public Collection<String> getExtendedUsage() {
+		Collection<String> usage = super.getExtendedUsage();
+		ArrayList<String> list = new ArrayList<String>(usage);
+		list.remove(0);
+		return list;
+	}
+
+	/**
+	 * Return the short name of this command.
+	 *
+	 * @return the localised name of the command
+	 */
+	@Override
+	public String getName() {
+		return MESSAGES.helpCommandName();
+	}
+
+	/**
+	 * Returns a brief description of what this command does.
+	 *
+	 * @return the localised description of the command
+	 */
+	@Override
+	public String getDescription() {
+		return MESSAGES.helpCommandDescription();
+	}
+
 }

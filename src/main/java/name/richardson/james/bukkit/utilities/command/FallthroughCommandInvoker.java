@@ -67,12 +67,4 @@ public class FallthroughCommandInvoker extends AbstractCommandInvoker {
 		return suggestions;
 	}
 
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder("FallthroughCommandInvoker{");
-		sb.append("fallthroughCommand=").append(fallthroughCommand);
-		sb.append(", ").append(super.toString());
-		sb.append('}');
-		return sb.toString();
-	}
 }
