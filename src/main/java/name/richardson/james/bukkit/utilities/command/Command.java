@@ -35,6 +35,7 @@ public interface Command extends Runnable {
 	public String getDescription();
 	public Collection<String> getExtendedUsage();
 	public String getName();
+	Set<String> getPermissions();
 	public Set<String> getSuggestions(String arguments);
 	public String getUsage();
 	public boolean isAuthorised(Permissible permissible);

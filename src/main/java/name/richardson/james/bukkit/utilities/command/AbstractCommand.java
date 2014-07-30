@@ -110,8 +110,6 @@ public abstract class AbstractCommand implements Command {
 
 	protected abstract CommandContext getNextScheduledContext();
 
-	protected abstract Set<String> getPermissions();
-
 	protected final Plugin getPlugin() {
 		return plugin;
 	}

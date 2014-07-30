@@ -35,32 +35,32 @@ public class FallthroughCommandInvoker extends AbstractCommandInvoker {
 
 	protected FallthroughCommandInvoker(Plugin plugin, BukkitScheduler scheduler, Command command) {
 		super(plugin, scheduler);
-		this.fallthroughCommand = command;
+		fallthroughCommand = command;
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, org.bukkit.command.Command cmd, String label, String[] args) {
+	public final boolean onCommand(CommandSender sender, org.bukkit.command.Command cmd, String label, String[] args) {
 		Command command = getCommand(args);
 		if (command != null) {
-			CommandContext context = new NestedCommandContext(args, sender);
+			CommandContext context = new NestedCommandContext(args, sender, command.getPermissions());
 			command.schedule(context);
 		} else {
-			CommandContext commandContext = new PassthroughCommandContext(args, sender);
+			CommandContext commandContext = new PassthroughCommandContext(args, sender, fallthroughCommand.getPermissions());
 			fallthroughCommand.schedule(commandContext);
 		}
 		return true;
 	}
 
 	@Override
-	public List<String> onTabComplete(CommandSender sender, org.bukkit.command.Command command, String alias, String[] args) {
+	public final List<String> onTabComplete(CommandSender sender, org.bukkit.command.Command command, String alias, String[] args) {
 		Command selectedCommand = getCommand(args);
 		List<String> suggestions = new ArrayList<String>();
 		if (selectedCommand != null) {
-			CommandContext context = new NestedCommandContext(args, sender);
+			CommandContext context = new NestedCommandContext(args, sender, selectedCommand.getPermissions());
 			String arguments = context.getArguments();
 			suggestions.addAll(selectedCommand.getSuggestions(arguments));
 		} else {
-			CommandContext context = new PassthroughCommandContext(args, sender);
+			CommandContext context = new PassthroughCommandContext(args, sender, selectedCommand.getPermissions());
 			String arguments = context.getArguments();
 			suggestions.addAll(fallthroughCommand.getSuggestions(arguments));
 		}

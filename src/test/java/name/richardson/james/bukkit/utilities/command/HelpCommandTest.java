@@ -18,7 +18,7 @@ import static org.mockito.Mockito.*;
 
 public class HelpCommandTest {
 
-	private HelpCommand command;
+	private RootCommandInvoker.HelpCommand command;
 	private Command nestedCommand;
 	private CommandSender sender;
 
@@ -44,7 +44,7 @@ public class HelpCommandTest {
 		commands.add(nestedCommand);
 		sender = mock(CommandSender.class);
 		PluginDescriptionFile descriptionFile = new PluginDescriptionFile("TestPlugin", "1.0.0", null);
-		command = new HelpCommand(plugin, scheduler, commands, descriptionFile, "test");
+		command = new RootCommandInvoker.HelpCommand(plugin, scheduler, commands, descriptionFile, "test");
 	}
 
 	@Test
