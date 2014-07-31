@@ -23,7 +23,9 @@ import java.util.*;
 import name.richardson.james.bukkit.utilities.command.argument.suggester.StringSuggester;
 import name.richardson.james.bukkit.utilities.command.argument.suggester.Suggester;
 
+import com.google.common.base.Joiner;
 import org.apache.commons.lang.Validate;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
@@ -33,44 +35,39 @@ import org.bukkit.scheduler.BukkitScheduler;
  */
 public abstract class AbstractCommandInvoker implements CommandInvoker {
 
-	private final Map<String, Command> commandMap = new TreeMap<String, Command>();
+	private final Map<String, Command> commands;
 	private final Plugin plugin;
 	private final BukkitScheduler scheduler;
 
 	public AbstractCommandInvoker(Plugin plugin, BukkitScheduler scheduler) {
 		this.plugin = plugin;
 		this.scheduler = scheduler;
-	}
-
-	protected static Suggester createSuggester(Iterable<Command> commands) {
-		Set<String> names = new HashSet<String>();
-		for (Command command : commands) {
-			names.add(command.getName());
-		}
-		return new StringSuggester(names);
+		commands = new TreeMap<String, Command>(String.CASE_INSENSITIVE_ORDER);
 	}
 
 	@Override
-	public void addCommand(Command command) {
+	public final void addCommand(Command command) {
 		Validate.notNull(command);
-		commandMap.put(command.getName(), command);
+		commands.put(command.getName(), command);
 	}
 
 	@Override
-	public void addCommands(Collection<Command> commands) {
+	public final void addCommands(Collection<Command> commands) {
 		Validate.notNull(commands);
 		for (Command command : commands) {
-			commandMap.put(command.getName(), command);
+			this.commands.put(command.getName(), command);
 		}
 	}
 
 	@Override
-	public Map<String, Command> getCommands() {
-		return Collections.unmodifiableMap(commandMap);
+	public final Map<String, Command> getCommands() {
+		return Collections.unmodifiableMap(commands);
 	}
 
-	protected Command getCommand(String[] arguments) {
+	protected final Command getCommand(String[] arguments) {
 		String name = (arguments.length == 0) ? null : arguments[0];
+		System.out.print(name);
+
 		if (name != null && getCommands().containsKey(name)) {
 			return getCommands().get(name);
 		} else {

@@ -20,27 +20,40 @@ package name.richardson.james.bukkit.utilities.command;
 
 import java.util.*;
 
+import com.google.common.base.Joiner;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 /**
  * An example implementation of {@link name.richardson.james.bukkit.utilities.command.CommandContext}. This implementation makes no additional verification checks on requested argumentsList and may throw
  * IndexOutOfBoundExceptions from the internal backing storage.
  */
-public class AbstractCommandContext implements CommandContext {
+public class SimpleCommandContext implements CommandContext {
 
 	private final String arguments;
 	private final CommandSender commandSender;
 	private final Map<String, Boolean> permissions;
-	private List<String> messages;
+	private final List<String> messages;
 
-	protected AbstractCommandContext(String[] arguments, CommandSender commandSender, Collection<String> permissions) {
+	public static final CommandContext create(String[] arguments, CommandSender sender, Collection<String> permissions) {
+		return create(arguments, sender, permissions, 0);
+	}
+
+	public static final CommandContext create(String[] arguments, CommandSender sender, Collection<String> permissions, int startIndex) {
+		String[] array = Arrays.copyOfRange(arguments, startIndex, arguments.length);
+		String joinedArguments = Joiner.on(" ").skipNulls().join(array);
+		return new SimpleCommandContext(joinedArguments, sender, permissions);
+	}
+
+	private SimpleCommandContext(String arguments, CommandSender commandSender, Collection<String> permissions) {
 		Validate.notNull(arguments);
 		Validate.notNull(commandSender);
+
 		this.commandSender = commandSender;
-		this.arguments = StringUtils.join(arguments, " ");
+		this.arguments = arguments;
 		this.permissions = new HashMap<>(permissions.size());
 		messages = new ArrayList<>();
 		for (String permission : permissions) {
@@ -66,7 +79,7 @@ public class AbstractCommandContext implements CommandContext {
 
 	@Override
 	public final boolean isAuthorised() {
-		return permissions.containsValue(true);
+		return permissions.containsValue(true) || permissions.isEmpty();
 	}
 
 	@Override
@@ -85,6 +98,26 @@ public class AbstractCommandContext implements CommandContext {
 		commandSender.sendMessage(messages);
 		this.messages.clear();
 		return messages.length;
+	}
+
+	@Override
+	public final UUID getCommandSenderUUID() {
+		if (commandSender instanceof Player) {
+			return ((Entity) commandSender).getUniqueId();
+		} else {
+			return new UUID(0,0);
+		}
+	}
+
+	@Override
+	public final String toString() {
+		final StringBuilder sb = new StringBuilder("SimpleCommandContext{");
+		sb.append("arguments='").append(arguments).append('\'');
+		sb.append(", commandSender=").append(commandSender);
+		sb.append(", messages=").append(messages);
+		sb.append(", permissions=").append(permissions);
+		sb.append('}');
+		return sb.toString();
 	}
 
 }

@@ -76,7 +76,7 @@ public abstract class AbstractCommand implements Command {
 
 	@Override
 	public final synchronized void run() {
-		getNextScheduledContext();
+		context = getNextScheduledContext();
 		if (getContext().isAuthorised()) {
 			try {
 				parseArguments(getContext().getArguments());
@@ -132,10 +132,6 @@ public abstract class AbstractCommand implements Command {
 
 	protected final int sendMessages() {
 		return context.sendMessages();
-	}
-
-	protected final void setContext(CommandContext context) {
-		this.context = context;
 	}
 
 }

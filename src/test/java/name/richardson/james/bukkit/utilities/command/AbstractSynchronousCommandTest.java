@@ -1,66 +1,44 @@
 package name.richardson.james.bukkit.utilities.command;
 
-import java.util.Map;
+import java.util.Set;
 
-import org.bukkit.permissions.Permissible;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
 
+@SuppressWarnings("ALL")
+@RunWith(MockitoJUnitRunner.class)
 public class AbstractSynchronousCommandTest {
 
-	private TestCommand command;
-	private Plugin plugin;
-	private BukkitScheduler scheduler;
+	private AbstractSynchronousCommand command;
+	@Mock private CommandContext context;
+	@Mock private Plugin plugin;
+	@Mock private BukkitScheduler scheduler;
 
-	@Before
-	public void setUp() throws Exception {
-		plugin = mock(Plugin.class);
-		scheduler = mock(BukkitScheduler.class);
-		command = new TestCommand(plugin, scheduler);
+	@Before public void setup() {
+		command = new TestSynchronousCommand(plugin, scheduler);
 	}
 
-	@Test
-	public void shouldCheckAllPermissionsAgainstPermissible() {
-		Permissible permissible = mock(Permissible.class);
-		command.getPermissionMap(permissible);
-		verify(permissible).hasPermission("a");
-		verify(permissible).hasPermission("b");
-	}
-
-	@Test
-	public void shouldReturnCorrectPermissionMap() {
-		Permissible permissible = mock(Permissible.class);
-		when(permissible.hasPermission("a")).thenReturn(true);
-		when(permissible.hasPermission("b")).thenReturn(false);
-		Map<String,Boolean> map = command.getPermissionMap(permissible);
-		assertTrue("Permission should be true!", map.get("a"));
-		assertFalse("Permission should be false", map.get("b"));
-	}
-
-	@Test
-	public void whenSchedulingAddContextToQueue() {
-		CommandContext context = mock(CommandContext.class);
+	@Test public void whenSchedulingCommandQueueCommandContextCorrectly() {
 		command.schedule(context);
-		assertSame("Command context should be the same!", context, command.getNextScheduledContext());
+		Assert.assertEquals("Command context has not been added to the queue correctly!", context, command.getNextScheduledContext());
 	}
 
-	@Test
-	public void whenSchedulingRunAsASynchronousTask() {
-		CommandContext context = mock(CommandContext.class);
+	@Test public void whenSchedulingCommandRegisterTask() {
 		command.schedule(context);
-		verify(scheduler, only()).runTask(plugin, command);
+		verify(scheduler).runTask(plugin, command);
 	}
 
+	private class TestSynchronousCommand extends AbstractSynchronousCommand {
 
-	@CommandPermissions(permissions = {"a","b"})
-	private class TestCommand extends AbstractSynchronousCommand {
-
-		protected TestCommand(Plugin plugin, BukkitScheduler scheduler) {
+		protected TestSynchronousCommand(Plugin plugin, BukkitScheduler scheduler) {
 			super(plugin, scheduler);
 		}
 
@@ -71,6 +49,11 @@ public class AbstractSynchronousCommandTest {
 
 		@Override
 		public String getName() {
+			return null;
+		}
+
+		@Override
+		public Set<String> getPermissions() {
 			return null;
 		}
 

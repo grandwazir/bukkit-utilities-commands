@@ -19,6 +19,7 @@ package name.richardson.james.bukkit.utilities.command;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.UUID;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.Permissible;
@@ -37,4 +38,5 @@ public interface CommandContext {
  	boolean isAuthorised(String permission);
 	boolean isAuthorised();
 	int sendMessages();
+	UUID getCommandSenderUUID();
 }

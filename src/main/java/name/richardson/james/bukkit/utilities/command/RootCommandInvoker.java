@@ -8,59 +8,44 @@ import name.richardson.james.bukkit.utilities.command.argument.suggester.Suggest
 import name.richardson.james.bukkit.utilities.command.localisation.Messages;
 import name.richardson.james.bukkit.utilities.command.localisation.MessagesFactory;
 
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.scheduler.BukkitScheduler;
 
-public class RootCommandInvoker implements CommandInvoker {
+public class RootCommandInvoker extends AbstractCommandInvoker {
 
 	private static final Messages MESSAGES = MessagesFactory.getColouredMessages();
-	private final TreeMap<String, name.richardson.james.bukkit.utilities.command.Command> commands;
 	private final PluginDescriptionFile description;
-	private final CommandInvoker invoker;
-	private final Plugin plugin;
+	private final Command helpCommand;
 	private final String prefix;
-	private final BukkitScheduler scheduler;
 
-	public RootCommandInvoker(Plugin plugin, BukkitScheduler scheduler, Collection<name.richardson.james.bukkit.utilities.command.Command> commands, String prefix) {
-		this.plugin = plugin;
-		this.scheduler = scheduler;
+	public RootCommandInvoker(Plugin plugin, BukkitScheduler scheduler, Collection<Command> commands, String prefix) {
+		super(plugin, scheduler);
 		this.prefix = prefix;
-		description = this.plugin.getDescription();
-		this.commands = new TreeMap<String, name.richardson.james.bukkit.utilities.command.Command>(String.CASE_INSENSITIVE_ORDER);
-		for (name.richardson.james.bukkit.utilities.command.Command command : commands) {
-			this.commands.put(command.getName(), command);
-		}
-		name.richardson.james.bukkit.utilities.command.Command helpCommand = new HelpCommand();
-		invoker = new FallthroughCommandInvoker(plugin, scheduler, helpCommand);
-		invoker.addCommands(commands);
+		description = getPlugin().getDescription();
+		addCommands(commands);
+		helpCommand = new HelpCommand();
 	}
 
 	@Override
-	public final void addCommand(name.richardson.james.bukkit.utilities.command.Command command) {
-		invoker.addCommand(command);
+	public final boolean onCommand(CommandSender sender, org.bukkit.command.Command cmd, String label, String[] args) {
+		Command command = (getCommand(args) == null) ? helpCommand : getCommand(args);
+		CommandContext context = SimpleCommandContext.create(args, sender, command.getPermissions(), 1);
+		command.schedule(context);
+		return true;
 	}
 
 	@Override
-	public final void addCommands(Collection<name.richardson.james.bukkit.utilities.command.Command> commands) {
-		invoker.addCommands(commands);
+	public final List<String> onTabComplete(CommandSender sender, org.bukkit.command.Command cmd, String alias, String[] args) {
+		Command command = (getCommand(args) == null) ? helpCommand : getCommand(args);
+		CommandContext context = SimpleCommandContext.create(args, sender, command.getPermissions(), 1);
+		Set<String> suggestions = command.getSuggestions(context.getArguments());
+		return new ArrayList<>(suggestions);
 	}
 
-	@Override
-	public final Map<String, name.richardson.james.bukkit.utilities.command.Command> getCommands() {
-		return invoker.getCommands();
-	}
-
-	@Override
-	public final boolean onCommand(CommandSender sender, Command command, String s, String[] strings) {
-		return invoker.onCommand(sender, command, s, strings);
-	}
-
-	@Override
-	public final List<String> onTabComplete(CommandSender sender, Command command, String s, String[] strings) {
-		return invoker.onTabComplete(sender, command, s, strings);
+	protected final Command getHelpCommand() {
+		return helpCommand;
 	}
 
 	private class HelpCommand extends AbstractSynchronousCommand {
@@ -68,12 +53,10 @@ public class RootCommandInvoker implements CommandInvoker {
 		private final Argument commandName;
 
 		public HelpCommand() {
-			super(plugin, scheduler);
+			super(RootCommandInvoker.this.getPlugin(), RootCommandInvoker.this.getScheduler());
 			ArgumentMetadata metadata = new SimpleArgumentMetadata(MESSAGES.helpCommandArgumentId(), MESSAGES.helpCommandArgumentName(), MESSAGES.helpCommandArgumentDesc());
-			Suggester suggester = new StringSuggester(commands.keySet());
-			Argument unused = new DummyArgument();
-			commandName = new PositionalArgument(metadata, suggester, 1);
-			addArgument(unused);
+			Suggester suggester = createSuggester(getCommands().values());
+			commandName = new PositionalArgument(metadata, suggester, 0);
 			addArgument(commandName);
 		}
 
@@ -94,32 +77,41 @@ public class RootCommandInvoker implements CommandInvoker {
 
 		@Override
 		protected final void execute() {
-			String commandName = this.commandName.getString();
-			name.richardson.james.bukkit.utilities.command.Command selectedCommand = (commandName == null) ? null : commands.get(commandName);
-			if (commandName != null && commandName.equalsIgnoreCase("help")) {
-				selectedCommand = this;
-			}
-			if (selectedCommand == null) {
-				addMessage(MESSAGES.pluginName(description.getName(), description.getVersion()));
-				addMessage(MESSAGES.pluginDescription(description.getDescription()));
-				addMessage(MESSAGES.helpCommandUsage(prefix, getName(), this.commandName.getUsage()));
-				for (name.richardson.james.bukkit.utilities.command.Command command : commands.values()) {
-					CommandSender commandSender = getContext().getCommandSender();
-					if (!command.isAuthorised(commandSender)) continue;
-					addMessage(MESSAGES.helpCommandListItem(prefix, command.getName(), command.getUsage()));
-				}
-			} else {
+			Command selectedCommand = getCommand();
+			if (selectedCommand != null) {
 				addMessage(MESSAGES.helpCommandExtendedDescription(selectedCommand.getDescription()));
 				addMessage(MESSAGES.helpCommandListItem(prefix, selectedCommand.getName(), selectedCommand.getUsage()));
 				for (String message : selectedCommand.getExtendedUsage()) {
 					addMessage(message);
 				}
+			} else {
+				addMessage(MESSAGES.pluginName(description.getName(), description.getVersion()));
+				addMessage(MESSAGES.pluginDescription(description.getDescription()));
+				addMessage(MESSAGES.helpCommandUsage(prefix, getName(), commandName.getUsage()));
+				for (Command command : getCommands().values()) {
+					CommandSender commandSender = getContext().getCommandSender();
+					if (!command.isAuthorised(commandSender)) continue;
+					addMessage(MESSAGES.helpCommandListItem(prefix, command.getName(), command.getUsage()));
+				}
 			}
 		}
 
-		private Suggester createSuggester(Iterable<name.richardson.james.bukkit.utilities.command.Command> commands) {
+		private Command getCommand() {
+			String commandName = this.commandName.getString();
+			Command command = (commandName == null) ? null : getCommands().get(commandName);
+			command = (command == null && commandName != null && commandName.equalsIgnoreCase(getName())) ? this : command;
+			return command;
+		}
+
+		private Command getCommand(String commandName) {
+			Command selectedCommand = (commandName == null) ? null : getCommands().get(commandName);
+			if (commandName.equalsIgnoreCase(getName())) selectedCommand = this;
+			return selectedCommand;
+		}
+
+		private Suggester createSuggester(Iterable<Command> commands) {
 			Set<String> names = new HashSet<String>();
-			for (name.richardson.james.bukkit.utilities.command.Command command : commands) {
+			for (Command command : commands) {
 				names.add(command.getName());
 			}
 			return new StringSuggester(names);
