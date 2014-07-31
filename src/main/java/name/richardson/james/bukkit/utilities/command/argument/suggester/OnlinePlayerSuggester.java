@@ -1,7 +1,7 @@
 /*******************************************************************************
- Copyright (c) 2013 James Richardson.
+ Copyright (c) 2014 James Richardson.
 
- OnlinePlayerSuggester.java is part of bukkit-utilities.
+ OnlinePlayerSuggester.java is part of BukkitUtilities.
 
  BukkitUtilities is free software: you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the Free
@@ -26,8 +26,8 @@ import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
 /**
- * Matches arguments against a list of currently online players and returns any possible matches. Used for returning a list of possible player names for tab
- * completion when using commands interactively.
+ * Matches arguments against a list of currently online players and returns any possible matches. Used for returning a
+ * list of possible player names for tab completion when using commands interactively.
  */
 public class OnlinePlayerSuggester implements Suggester {
 

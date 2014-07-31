@@ -1,7 +1,7 @@
 /*******************************************************************************
- Copyright (c) 2013 James Richardson.
+ Copyright (c) 2014 James Richardson.
 
- Command.java is part of bukkit-utilities.
+ Command.java is part of BukkitUtilities.
 
  BukkitUtilities is free software: you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the Free
@@ -19,16 +19,14 @@
 package name.richardson.james.bukkit.utilities.command;
 
 import java.util.Collection;
-import java.util.Map;
 import java.util.Set;
-
-import name.richardson.james.bukkit.utilities.command.argument.ArgumentInvoker;
 
 import org.bukkit.permissions.Permissible;
 
 /**
- * Executes actions on behalf of a user, notifies the user of the outcome. Used anywhere where a user is required instructions to a plugin interactively.
- * Commands also provide a method for users to check to see if they are authorised to use the command in the first place.
+ * Executes actions on behalf of a user, notifies the user of the outcome. Used anywhere where a user is required
+ * instructions to a plugin interactively. Commands also provide a method for users to check to see if they are
+ * authorised to use the command in the first place.
  */
 public interface Command extends Runnable {
 
@@ -40,5 +38,4 @@ public interface Command extends Runnable {
 	public String getUsage();
 	public boolean isAuthorised(Permissible permissible);
 	public void schedule(CommandContext context);
-
 }

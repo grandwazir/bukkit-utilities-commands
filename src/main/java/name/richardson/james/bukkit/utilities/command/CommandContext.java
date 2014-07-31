@@ -1,7 +1,7 @@
 /*******************************************************************************
- Copyright (c) 2013 James Richardson.
+ Copyright (c) 2014 James Richardson.
 
- CommandContext.java is part of bukkit-utilities.
+ CommandContext.java is part of BukkitUtilities.
 
  BukkitUtilities is free software: you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the Free
@@ -18,16 +18,14 @@
 package name.richardson.james.bukkit.utilities.command;
 
 import java.util.Collection;
-import java.util.Map;
 import java.util.UUID;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.permissions.Permissible;
 
 /**
- * A object that represents the context that a {@link name.richardson.james.bukkit.utilities.command.Command} has been executed within. This object is
- * responsible for parsing the arguments and providing convenience methods to retrieve them. It is up to individual implementations to decide what to do when a
- * requested argument does not exist.
+ * A object that represents the context that a {@link name.richardson.james.bukkit.utilities.command.Command} has been
+ * executed within. This object is responsible for parsing the arguments and providing convenience methods to retrieve
+ * them. It is up to individual implementations to decide what to do when a requested argument does not exist.
  */
 public interface CommandContext {
 
@@ -35,7 +33,7 @@ public interface CommandContext {
 	void addMessages(Collection<String> messages);
 	String getArguments();
 	CommandSender getCommandSender();
- 	boolean isAuthorised(String permission);
+	boolean isAuthorised(String permission);
 	boolean isAuthorised();
 	int sendMessages();
 	UUID getCommandSenderUUID();

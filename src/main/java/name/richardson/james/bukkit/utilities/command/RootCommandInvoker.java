@@ -1,8 +1,28 @@
+/*******************************************************************************
+ Copyright (c) 2014 James Richardson.
+
+ RootCommandInvoker.java is part of BukkitUtilities.
+
+ BukkitUtilities is free software: you can redistribute it and/or modify it
+ under the terms of the GNU General Public License as published by the Free
+ Software Foundation, either version 3 of the License, or (at your option) any
+ later version.
+
+ BukkitUtilities is distributed in the hope that it will be useful, but WITHOUT
+ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License along with
+ BukkitUtilities. If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package name.richardson.james.bukkit.utilities.command;
 
 import java.util.*;
 
-import name.richardson.james.bukkit.utilities.command.argument.*;
+import name.richardson.james.bukkit.utilities.command.argument.Argument;
+import name.richardson.james.bukkit.utilities.command.argument.ArgumentMetadata;
+import name.richardson.james.bukkit.utilities.command.argument.PositionalArgument;
+import name.richardson.james.bukkit.utilities.command.argument.SimpleArgumentMetadata;
 import name.richardson.james.bukkit.utilities.command.argument.suggester.StringSuggester;
 import name.richardson.james.bukkit.utilities.command.argument.suggester.Suggester;
 import name.richardson.james.bukkit.utilities.command.localisation.Messages;
@@ -90,7 +110,8 @@ public class RootCommandInvoker extends AbstractCommandInvoker {
 				addMessage(MESSAGES.helpCommandUsage(prefix, getName(), commandName.getUsage()));
 				for (Command command : getCommands().values()) {
 					CommandSender commandSender = getContext().getCommandSender();
-					if (!command.isAuthorised(commandSender)) continue;
+					if (!command.isAuthorised(commandSender))
+						continue;
 					addMessage(MESSAGES.helpCommandListItem(prefix, command.getName(), command.getUsage()));
 				}
 			}
@@ -105,7 +126,8 @@ public class RootCommandInvoker extends AbstractCommandInvoker {
 
 		private Command getCommand(String commandName) {
 			Command selectedCommand = (commandName == null) ? null : getCommands().get(commandName);
-			if (commandName.equalsIgnoreCase(getName())) selectedCommand = this;
+			if (commandName.equalsIgnoreCase(getName()))
+				selectedCommand = this;
 			return selectedCommand;
 		}
 
@@ -116,6 +138,5 @@ public class RootCommandInvoker extends AbstractCommandInvoker {
 			}
 			return new StringSuggester(names);
 		}
-
 	}
 }

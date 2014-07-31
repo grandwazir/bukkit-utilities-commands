@@ -1,7 +1,7 @@
 /*******************************************************************************
- Copyright (c) 2013 James Richardson.
+ Copyright (c) 2014 James Richardson.
 
- CommandInvoker.java is part of bukkit-utilities.
+ CommandInvoker.java is part of BukkitUtilities.
 
  BukkitUtilities is free software: you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the Free
@@ -24,13 +24,15 @@ import java.util.Map;
 import org.bukkit.command.TabExecutor;
 
 /**
- * Manages and handles the execution of {@link name.richardson.james.bukkit.utilities.command.Command}s. It is responsible for creating a {@link
- * CommandContext} and executing the correct command depending on the arguments provided.
+ * Manages and handles the execution of {@link name.richardson.james.bukkit.utilities.command.Command}s. It is
+ * responsible for creating a {@link CommandContext} and executing the correct command depending on the arguments
+ * provided.
  */
 public interface CommandInvoker extends TabExecutor {
 
 	/**
-	 * Add a command to this CommandInvoker allowing it to delegate arguments to it that match the supplied command's name.
+	 * Add a command to this CommandInvoker allowing it to delegate arguments to it that match the supplied command's
+	 * name.
 	 *
 	 * @param command the command to add
 	 */

@@ -1,7 +1,7 @@
 /*******************************************************************************
- Copyright (c) 2013 James Richardson.
+ Copyright (c) 2014 James Richardson.
 
- AbstractCommandContext.java is part of bukkit-utilities.
+ SimpleCommandContext.java is part of BukkitUtilities.
 
  BukkitUtilities is free software: you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the Free
@@ -21,14 +21,14 @@ package name.richardson.james.bukkit.utilities.command;
 import java.util.*;
 
 import com.google.common.base.Joiner;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.Validate;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 /**
- * An example implementation of {@link name.richardson.james.bukkit.utilities.command.CommandContext}. This implementation makes no additional verification checks on requested argumentsList and may throw
+ * An example implementation of {@link name.richardson.james.bukkit.utilities.command.CommandContext}. This
+ * implementation makes no additional verification checks on requested argumentsList and may throw
  * IndexOutOfBoundExceptions from the internal backing storage.
  */
 public class SimpleCommandContext implements CommandContext {
@@ -105,7 +105,7 @@ public class SimpleCommandContext implements CommandContext {
 		if (commandSender instanceof Player) {
 			return ((Entity) commandSender).getUniqueId();
 		} else {
-			return new UUID(0,0);
+			return new UUID(0, 0);
 		}
 	}
 
@@ -119,5 +119,4 @@ public class SimpleCommandContext implements CommandContext {
 		sb.append('}');
 		return sb.toString();
 	}
-
 }

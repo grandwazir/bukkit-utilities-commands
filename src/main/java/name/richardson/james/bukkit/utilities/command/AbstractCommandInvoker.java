@@ -1,7 +1,7 @@
 /*******************************************************************************
- Copyright (c) 2013 James Richardson.
+ Copyright (c) 2014 James Richardson.
 
- AbstractCommandInvoker.java is part of bukkit-utilities.
+ AbstractCommandInvoker.java is part of BukkitUtilities.
 
  BukkitUtilities is free software: you can redistribute it and/or modify it
  under the terms of the GNU General Public License as published by the Free
@@ -18,20 +18,18 @@
 
 package name.richardson.james.bukkit.utilities.command;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+import java.util.TreeMap;
 
-import name.richardson.james.bukkit.utilities.command.argument.suggester.StringSuggester;
-import name.richardson.james.bukkit.utilities.command.argument.suggester.Suggester;
-
-import com.google.common.base.Joiner;
 import org.apache.commons.lang.Validate;
-import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
 /**
- * This abstract implementation provides final methods for all the methods specified in the CommandInvoker interface. It should be used for convenience when
- * implementing your own CommandInvokers.
+ * This abstract implementation provides final methods for all the methods specified in the CommandInvoker interface. It
+ * should be used for convenience when implementing your own CommandInvokers.
  */
 public abstract class AbstractCommandInvoker implements CommandInvoker {
 
