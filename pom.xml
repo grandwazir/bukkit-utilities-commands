@@ -9,7 +9,7 @@
     </parent>
     <artifactId>bukkit-utilities-commands</artifactId>
     <groupId>name.richardson.james.bukkit</groupId>
-    <version>8.0.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>BukkitUtilities (Commands)</name>
     <url>http://grandwazir.github.com/${project.name}/</url>
     <description>A utility library containing reusable classes and implementations for use with Bukkit.</description>
