@@ -1,5 +1,5 @@
 /*******************************************************************************
- Copyright (c) 2013 James Richardson.
+ Copyright (c) 2014 James Richardson.
 
  PlayerMatcherTest.java is part of BukkitUtilities.
 

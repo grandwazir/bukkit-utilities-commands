@@ -17,7 +17,35 @@
  ******************************************************************************/
 package name.richardson.james.bukkit.utilities.command;
 
-/**
- * Created by james on 01/08/14.
- */
-public class SimpleCommandInvoker {}
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitScheduler;
+
+public final class SimpleCommandInvoker extends AbstractCommandInvoker {
+
+	private final Command command;
+
+	public SimpleCommandInvoker(Plugin plugin, BukkitScheduler scheduler, Command command) {
+		super(plugin, scheduler);
+		this.command = command;
+	}
+
+	@Override
+	public boolean onCommand(CommandSender sender, org.bukkit.command.Command cmd, String label, String[] args) {
+		CommandContext context = SimpleCommandContext.create(args, sender, command.getPermissions(), 0);
+		command.schedule(context);
+		return true;
+	}
+
+	@Override
+	public List<String> onTabComplete(CommandSender sender, org.bukkit.command.Command cmd, String alias, String[] args) {
+		CommandContext context = SimpleCommandContext.create(args, sender, command.getPermissions(), 0);
+		Set<String> suggestions = command.getSuggestions(context.getArguments());
+		return new ArrayList<>(suggestions);
+	}
+
+}
