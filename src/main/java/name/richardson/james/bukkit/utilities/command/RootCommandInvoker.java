@@ -28,6 +28,7 @@ import name.richardson.james.bukkit.utilities.command.argument.suggester.Suggest
 import name.richardson.james.bukkit.utilities.command.localisation.Messages;
 import name.richardson.james.bukkit.utilities.command.localisation.MessagesFactory;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -42,7 +43,7 @@ public class RootCommandInvoker extends AbstractCommandInvoker {
 
 	public RootCommandInvoker(Plugin plugin, BukkitScheduler scheduler, Collection<Command> commands, String prefix) {
 		super(plugin, scheduler);
-		this.prefix = prefix;
+		this.prefix = ChatColor.RED + prefix;
 		description = getPlugin().getDescription();
 		addCommands(commands);
 		helpCommand = new HelpCommand();
