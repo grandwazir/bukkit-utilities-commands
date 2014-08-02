@@ -64,8 +64,6 @@ public abstract class AbstractCommandInvoker implements CommandInvoker {
 
 	protected final Command getCommand(String[] arguments) {
 		String name = (arguments.length == 0) ? null : arguments[0];
-		System.out.print(name);
-
 		if (name != null && getCommands().containsKey(name)) {
 			return getCommands().get(name);
 		} else {
