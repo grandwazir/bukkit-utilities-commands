@@ -43,6 +43,7 @@ public class SimpleCommandContext implements CommandContext {
 	}
 
 	public static final CommandContext create(String[] arguments, CommandSender sender, Collection<String> permissions, int startIndex) {
+		if (arguments.length == 0) return create(arguments, sender, permissions);
 		String[] array = Arrays.copyOfRange(arguments, startIndex, arguments.length);
 		String joinedArguments = Joiner.on(" ").skipNulls().join(array);
 		return new SimpleCommandContext(joinedArguments, sender, permissions);
