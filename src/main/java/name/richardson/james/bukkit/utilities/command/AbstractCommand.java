@@ -83,6 +83,7 @@ public abstract class AbstractCommand implements Command {
 				execute();
 			} catch (InvalidArgumentException e) {
 				addMessage(MESSAGES.invalidArgument());
+				addMessage(e.getError());
 			}
 		} else {
 			addMessage(MESSAGES.noPermission());
