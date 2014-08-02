@@ -28,6 +28,7 @@ import name.richardson.james.bukkit.utilities.command.argument.suggester.Suggest
 import name.richardson.james.bukkit.utilities.command.localisation.Messages;
 import name.richardson.james.bukkit.utilities.command.localisation.MessagesFactory;
 
+import com.sun.swing.internal.plaf.metal.resources.metal;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
@@ -101,19 +102,19 @@ public class RootCommandInvoker extends AbstractCommandInvoker {
 			Command selectedCommand = getCommand();
 			if (selectedCommand != null) {
 				addMessage(MESSAGES.helpCommandExtendedDescription(selectedCommand.getDescription()));
-				addMessage(MESSAGES.helpCommandListItem(prefix, selectedCommand.getName(), selectedCommand.getUsage()));
+				addMessage(MESSAGES.helpCommandListItem(prefix, selectedCommand.getName(), getColouredUsage(selectedCommand.getUsage())));
 				for (String message : selectedCommand.getExtendedUsage()) {
 					addMessage(message);
 				}
 			} else {
 				addMessage(MESSAGES.pluginName(description.getName(), description.getVersion()));
 				addMessage(MESSAGES.pluginDescription(description.getDescription()));
-				addMessage(MESSAGES.helpCommandUsage(prefix, getName(), commandName.getUsage()));
+				addMessage(MESSAGES.helpCommandUsage(prefix, getName(), getColouredUsage(getUsage())));
 				for (Command command : getCommands().values()) {
 					CommandSender commandSender = getContext().getCommandSender();
 					if (!command.isAuthorised(commandSender))
 						continue;
-					addMessage(MESSAGES.helpCommandListItem(prefix, command.getName(), command.getUsage()));
+					addMessage(MESSAGES.helpCommandListItem(prefix, command.getName(), getColouredUsage(command.getUsage())));
 				}
 			}
 		}
@@ -139,5 +140,12 @@ public class RootCommandInvoker extends AbstractCommandInvoker {
 			}
 			return new StringSuggester(names);
 		}
+
+		private String getColouredUsage(String usage) {
+			String message = usage.replaceAll("\\[", ChatColor.GREEN + "\\[");
+			message = message.replaceAll("\\<", ChatColor.YELLOW + "\\<");
+			return message;
+		}
+
 	}
 }
